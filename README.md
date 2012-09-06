@@ -14,8 +14,8 @@ difficulty, for example, collect leafs or find his way through a labyrinth.
 Greenfoot is a development environment for Java. It allows a very rapid development of interactive, 
 graphical projects.
 
-Greenfoot is great for novice programmers because one doesn’t have to deal with many of the big 
+Greenfoot is great for novice programmers because one doesn't have to deal with many of the big 
 difficulties (like public static void main(String []) and such). Nevertheless, Greenfoot is real 
 Java and leaves all options open. Thus, advanced students can also realize very complex projects.
 
-**GreenfootKara combines the proven concept of Kara with Greenfoot’s flexibility and ease of use.**
+**GreenfootKara combines the proven concept of Kara with Greenfoot's flexibility and ease of use.**
