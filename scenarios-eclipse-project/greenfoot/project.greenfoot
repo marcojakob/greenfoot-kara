@@ -1,0 +1,13 @@
+#Greenfoot project file
+class.Kara.image=kara_gray.png
+class.KaraWorld.image=field.png
+class.Leaf.image=leaf.png
+class.Mushroom.image=mushroom.png
+class.MyKara.image=kara.png
+class.Tree.image=tree.png
+mainWindow.height=620
+mainWindow.width=800
+mainWindow.x=400
+mainWindow.y=120
+project.charset=windows-1252
+version=2.4.0
