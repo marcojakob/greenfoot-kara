@@ -53,7 +53,11 @@ public class KaraWorld extends World {
     static {
     	// This code is executed when the class is loaded, 
     	// BEFORE the constructor is called
-    	worldSetup = loadWorldSetupFromFile(WORLD_SETUP_FILE);
+		if (WORLD_SETUP_FILE == null) {
+			worldSetup = null;
+		} else {
+			worldSetup = loadWorldSetupFromFile(WORLD_SETUP_FILE);
+		}
     }
     
 	/**

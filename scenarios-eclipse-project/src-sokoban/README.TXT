@@ -19,7 +19,7 @@ PROGRAM SOURCE REMARKS:
     copied into the levels text file.
 
 
-	
+
 ------------------------------------------------------------------------
 -- Kara Sokoban (GERMAN) --
 ------------------------------------------------------------------------	
@@ -41,9 +41,9 @@ BEMERKUNGEN ZUM QUELLTEXT:
 	Welt --> generateASCIILevel() den Level auf die Konsole ausgeben lassen.
 	Der generierte ASCII Text kann anschliessend in die levels Textdatei
 	kopiert werden.
-	
-	
+
 
 
 ------------------------------------------------------------------------
 Author:  Marco Jakob (majakob@gmx.ch)
+Version: 1.3.4

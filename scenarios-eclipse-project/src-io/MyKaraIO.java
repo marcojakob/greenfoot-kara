@@ -1,4 +1,3 @@
-import greenfoot.*;
 
 /**
  * MyKara is a subclass of KaraIO. Therefore, it inherits all methods of KaraIO: <p>
@@ -15,6 +14,6 @@ public class MyKaraIO extends KaraIO {
      * <i>In der Methode 'act()' koennen die Befehle fuer Kara programmiert werden</i>
      */
 	public void act() {
-
+		// This class will be replaced by the scenario MyKara class.
 	}
 }

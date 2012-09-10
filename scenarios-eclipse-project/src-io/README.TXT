@@ -22,9 +22,9 @@
 -   Kara kann Pilze schieben, falls hinter dem Pilz nicht ein zweiter 
     Pilz oder ein Baum steht.
 -   Kara kann Blaetter auf Felder legen und Blaetter wieder auflesen.
-
-
+	
 
 
 ------------------------------------------------------------------------
 Author:  Marco Jakob (majakob@gmx.ch)
+Version: 1.3.4

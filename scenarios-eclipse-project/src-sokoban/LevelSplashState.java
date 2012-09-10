@@ -23,6 +23,7 @@ public class LevelSplashState extends ScreenState {
 	 */
 	public void initScreen() {
 		gameScreen.createBlackBackground();
+		Greenfoot.setSpeed(50);
 
 		levelAnimLabel = new AnimatedLabel("Level "
 				+ gameScreen.getCurrentLevelNumber(), 350, 50,
@@ -85,6 +86,7 @@ public class LevelSplashState extends ScreenState {
 		} else if (levelAnimLabel.isDone()) {
 			// Fly out animation ended --> go to game state
 			gameScreen.setState(gameScreen.getGameState());
+			Greenfoot.setSpeed(100);
 		}
 
 		if (listenToKeyEvents) {

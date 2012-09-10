@@ -1,5 +1,3 @@
-import greenfoot.*;
-
 import javax.swing.JOptionPane;
 
 /**
@@ -10,7 +8,7 @@ import javax.swing.JOptionPane;
  * 
  * @author Marco Jakob (majakob@gmx.ch)
  */
-public class KaraIO extends Actor {
+public class KaraIO extends Kara {
 
 	/**
 	 * Displays the specified message as info to the user <br>

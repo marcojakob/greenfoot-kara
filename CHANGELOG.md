@@ -4,6 +4,11 @@
 * Major changes to be able to work with an eclipse project to generate
 	Greenfoot scenarios.
 * Corrected little bug in Exercise 12.
+* Kara now has a stop() method to stop the simulation cycle. Now we can always use the
+	run button. This gives us the ability to always use the run-Button and still 
+	have a program that terminates. Greenfoot 2.1.2 has a problem with the act-button
+	so that the first act() is executed after a compile, the delay() method is ignored
+	and thus Kara moves very fast to the end.
 
 
 ## GreenfootKara 1.3, 2012-07-04

@@ -57,7 +57,7 @@ public class StartState extends ScreenState {
 			gameScreen.addObject(passwordOkLabel,
 					GameScreen.WIDTH_IN_CELLS / 2 + 5, 15);
 			
-			if (GameScreen.HIGHSCORE_ENABLED) {
+			if (MyKaraSokoban.HIGHSCORE_ENABLED) {
 				highscoreButton = new Button("Highscore", 130, 30,
 						GameScreen.FONT_M);
 				highscoreButton.setBorderColor(Color.RED);

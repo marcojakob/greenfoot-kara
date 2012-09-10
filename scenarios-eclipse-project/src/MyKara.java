@@ -1,4 +1,3 @@
-import greenfoot.*;
 
 /**
  * MyKara is a subclass of Kara. Therefore, it inherits all methods of Kara: <p>
@@ -15,8 +14,6 @@ public class MyKara extends Kara {
      * <i>In der Methode 'act()' koennen die Befehle fuer Kara programmiert werden</i>
      */
 	public void act() {
-		move();
-		turnRight();
-		move();
+		// This class will be replaced by the scenario MyKara class.
 	}
 }

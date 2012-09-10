@@ -1,0 +1,27 @@
+World: Kara 20a Kara As Guard 
+X: 9
+Y: 9
+Kara: up
+
+    ####
+   #...#
+  #....#
+@#.....#
+  #..##
+ #..#
+  ###
+
+World: Kara 20b Kara As Guard 
+X: 9
+Y: 9
+Kara: left
+
+ #######
+ #.....#
+ #.###.#
+ #.# #.#
+ #.# #.#
+ #.# #.#
+ ### ###
+   @
+  

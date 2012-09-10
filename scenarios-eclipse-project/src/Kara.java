@@ -154,6 +154,16 @@ public class Kara extends Actor {
 	public boolean mushroomFront() {
 		return getObjectInFront(getRotation(), 1, Mushroom.class) != null;
 	}
+	
+	/**
+	 * Stops the simulation cycle (the act()-method is finished first) <br>
+	 * <i>Stoppt die Simulation (die act()-Methode wird noch bis unten ausgefuehrt)</i>
+	 */
+	protected void stop() {
+		Greenfoot.stop();
+	}
+	
+	
 
 	/*----- END OF STANDARD KARA METHODS! BELOW ARE JUST SOME HELPER METHODS ----- */
 

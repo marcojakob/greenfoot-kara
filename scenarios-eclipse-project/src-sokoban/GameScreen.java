@@ -22,28 +22,6 @@ import javax.swing.JOptionPane;
  */
 public class GameScreen extends KaraWorld {
 	
-	/**
-	 * The file containing the levels <br>
-	 * <i>Die Datei, welche die Levels enthaelt.</i>
-	 */
-	public static final String LEVEL_FILE = "Levels.txt";
-
-	/**
-	 * Set to true to directly show the game (for testing and level design). Set
-	 * to false for normal mode. <br>
-	 * <i>Bei true wird direkt das Spielfeld angezeigt (zum Testen und Level
-	 * Erstellen). Fuer Normaler Modus auf false setzen.</i>)
-	 */
-	public static final boolean DEVELOPER_MODE = true;
-
-	/**
-	 * Set to true to enable the highscore. <br>
-	 * <i>Wenn auf true gesetzt, dann wir die Highscore aktiviert.</i>
-	 */
-	public static final boolean HIGHSCORE_ENABLED = false;
-	
-	
-	
 	// the screen settings
 	public static final int WIDTH_IN_CELLS = 21;
 	public static final int HEIGHT_IN_CELLS = 18;
@@ -104,17 +82,17 @@ public class GameScreen extends KaraWorld {
 		prepare();
 	}
 		
-	public void prepare() {
+	protected void prepare() {
 		// maximum speed for fast reaction 
 		Greenfoot.setSpeed(100);
 		
 		// Read all the levels from the level file
-		this.allLevels = Level.parseFromFile(LEVEL_FILE, MyKara.class);
+		this.allLevels = Level.parseFromFile(MyKaraSokoban.LEVEL_FILE, MyKaraSokoban.class);
 		
 		if (allLevels == null || allLevels.length == 0) {
 			String message = "<html>" + "Could not load Levels from file: <p><i>" 
 					+ "Konnte Levels nicht laden von der Datei: "
-					+ "</i><p><p>" + LEVEL_FILE
+					+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE
 					+ "<p><p>(A Level-file must contain at least one String \"Level:\")</html>";
 
 			JOptionPane.showMessageDialog(null, message, "Warning",
@@ -135,7 +113,7 @@ public class GameScreen extends KaraWorld {
 		numberOfMoves = 0;
 		
 		// init the highscore manager
-		if (HIGHSCORE_ENABLED) {
+		if (MyKaraSokoban.HIGHSCORE_ENABLED) {
 			// First tries to use the FileHighscore, if not possible, the
 			// ServerHighscore is used.
 			if (FileHighscore.isAvailable()) {
@@ -148,7 +126,7 @@ public class GameScreen extends KaraWorld {
 		}
 		
 		// skip the start menu if in developer mode
-		if (DEVELOPER_MODE) {
+		if (MyKaraSokoban.DEVELOPER_MODE) {
 			setState(gameState);
 		} else {
 			setState(startState);
@@ -162,7 +140,7 @@ public class GameScreen extends KaraWorld {
 	 * @param state
 	 *            the new state of the screen
 	 */
-	public void setState(ScreenState state) {
+	protected void setState(ScreenState state) {
 		setState(state, true);
 	}
 
@@ -175,7 +153,7 @@ public class GameScreen extends KaraWorld {
 	 *            if true, all objects in the world are removed before the new
 	 *            state is initialized.
 	 */
-	public void setState(ScreenState state, boolean clearWorld) {
+	protected void setState(ScreenState state, boolean clearWorld) {
 		if (clearWorld) {
 			// Remove all objects in the world
 			removeObjects(getObjects(null));
@@ -187,49 +165,49 @@ public class GameScreen extends KaraWorld {
 	/**
 	 * Returns the start screen state.
 	 */
-	public ScreenState getStartState() {
+	protected ScreenState getStartState() {
 		return startState;
 	}
 
 	/**
 	 * Returns the enter name screen state.
 	 */
-	public ScreenState getEnterNameState() {
+	protected ScreenState getEnterNameState() {
 		return enterNameState;
 	}
 
 	/**
 	 * Returns the level splash screen state.
 	 */
-	public ScreenState getLevelSplashState() {
+	protected ScreenState getLevelSplashState() {
 		return levelSplashState;
 	}
 
 	/**
 	 * Returns the game screen state.
 	 */
-	public ScreenState getGameState() {
+	protected ScreenState getGameState() {
 		return gameState;
 	}
 
 	/**
 	 * Returns the level complete screen state.
 	 */
-	public ScreenState getLevelCompleteState() {
+	protected ScreenState getLevelCompleteState() {
 		return levelCompleteState;
 	}
 
 	/**
 	 * Returns the game complete screen state.
 	 */
-	public ScreenState getGameCompleteState() {
+	protected ScreenState getGameCompleteState() {
 		return gameCompleteState;
 	}
 
 	/**
 	 * Returns the highscore screen state.
 	 */
-	public ScreenState getHighscoreState() {
+	protected ScreenState getHighscoreState() {
 		return highscoreState;
 	}
 
@@ -237,7 +215,7 @@ public class GameScreen extends KaraWorld {
 	 * Removes the tiled background images and sets the bg color to black with
 	 * no grid.
 	 */
-	public void createBlackBackground() {
+	protected void createBlackBackground() {
         GreenfootImage img = new GreenfootImage(GameScreen.WIDTH_IN_CELLS, GameScreen.HEIGHT_IN_CELLS);
         img.setColor(Color.BLACK);
         img.fill();
@@ -422,5 +400,21 @@ public class GameScreen extends KaraWorld {
 	@SuppressWarnings("unchecked")
 	protected String toASCIIText() {
 		return Level.createFromActors(getObjects(null), 0, "XXXX").toASCIIText(false);
+	}
+	
+	/**
+	 * Prints the world setup to the console.
+	 */
+	public void printWorldSetupToConsole() {
+		// We repeat the method here so that it appears in the context menu in Greenfoot
+		super.printWorldSetupToConsole();
+	}
+	
+	/**
+	 * Saves the world setup to a file that the user can choose.
+	 */
+	public void saveWorldSetupToFile() {
+		// We repeat the method here so that it appears in the context menu in Greenfoot
+		super.saveWorldSetupToFile();
 	}
 }
