@@ -1,10 +1,15 @@
-import greenfoot.*;
+import greenfoot.Actor;
+import greenfoot.GreenfootImage;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -307,6 +312,9 @@ public class WorldSetup {
 	 * width and height attribute keys are used to get width and height from the
 	 * file. If those attributes are not defined in the text file, width and
 	 * height are determined from the actor positions.
+	 * <p>
+	 * Hint: If there are problems accessing a directory (e.g. on the web) then
+	 * only filenames without wildcards should be used!
 	 * 
 	 * @param fileName
 	 *            The filename of the world setup file, relative to the package
@@ -330,6 +338,9 @@ public class WorldSetup {
 	 * width and height attribute keys are used to get width and height from the
 	 * file. If those attributes are not defined in the text file, width and
 	 * height are determined from the actor positions.
+	 * <p>
+	 * Hint: If there are problems accessing a directory (e.g. on the web) then
+	 * only filenames without wildcards should be used!
 	 * 
 	 * @param fileName
 	 *            The filename of the world setup file, relative to the class,
@@ -354,6 +365,9 @@ public class WorldSetup {
 
 	/**
 	 * Parses (one or many) world setups from the specified file.
+	 * <p>
+	 * Hint: If there are problems accessing a directory (e.g. on the web) then
+	 * only filenames without wildcards should be used!
 	 * 
 	 * @param fileName
 	 *            The filename of the world setup file, relative to the class,
@@ -383,79 +397,31 @@ public class WorldSetup {
 		List<WorldSetup> result = new ArrayList<WorldSetup>();
 
 		try {
+			boolean containsWildcards = fileName.indexOf('?') != -1 
+					|| fileName.indexOf('*') != -1;
+			if (!containsWildcards) {
+				// no wildcards --> try to load from stream
+				InputStream stream;
+				if (clazz != null) {
+					stream = clazz.getResourceAsStream(fileName);
+				} else {
+					stream = WorldSetup.class.getResourceAsStream(fileName);
+				}
+				if (stream != null) {
+					List<String> lines = FileUtils.readAllLines(stream);
+					result.addAll(parseFromStrings(lines, titleKey, worldWidth,
+							worldHeight, fileName, attributeKeys));
+					return result.toArray(new WorldSetup[result.size()]);
+				}
+			}
+			
+			// try to find files, possibly with wildcard
 			List<File> matchingFiles = findMatchingFiles(fileName, clazz);
 			
 			for (File matchingFile : matchingFiles) {
-				List<String> lines = Files.readAllLines(matchingFile.toPath(), Charset.defaultCharset());
-				
-				Builder currentBuilder = null;
-				
-				// Go trough all lines of the file
-				for (String line : lines) {
-					if (!line.startsWith(";")) {
-						if (line.startsWith(titleKey)) {
-							if (currentBuilder != null) {
-								result.add(currentBuilder.build());
-							}
-							currentBuilder = new Builder(titleKey);
-							currentBuilder.setTitle(line.substring(titleKey.length()).trim());
-							currentBuilder.setFileName(matchingFile.getName());
-							
-							if (worldWidth > -1 && worldHeight > -1) {
-								currentBuilder.setWidth(worldWidth);
-								currentBuilder.setHeight(worldHeight);
-							}
-							continue;
-						} else if (currentBuilder == null) {
-							continue; // continue until we have the first valid
-										// world setup title key
-						}
-
-						if (line.startsWith(WIDTH_KEY)) {
-							try {
-								currentBuilder.setWidth(Integer.parseInt(line
-										.substring(WIDTH_KEY.length()).trim()));
-								continue;
-							} catch (NumberFormatException e) {
-								// do nothing
-							}
-						}
-
-						if (line.startsWith(HEIGHT_KEY)) {
-							try {
-								currentBuilder
-										.setHeight(Integer.parseInt(line
-												.substring(HEIGHT_KEY.length())
-												.trim()));
-								continue;
-							} catch (NumberFormatException e) {
-								// do nothing
-							}
-						}
-
-						boolean foundAttribute = false;
-						for (String attributeKey : attributeKeys) {
-							if (line.startsWith(attributeKey)) {
-								currentBuilder.addAttribute(attributeKey, line
-										.substring(attributeKey.length())
-										.trim());
-								foundAttribute = true;
-								break;
-							}
-						}
-						if (foundAttribute) {
-							continue;
-						}
-
-						if (line.matches("[@#.$\\s*+]*")) {
-							currentBuilder.addActorLine(line);
-						}
-					}
-				}
-				// add the last world setup
-				if (currentBuilder != null) {
-					result.add(currentBuilder.build());
-				}
+				List<String> lines = FileUtils.readAllLines(matchingFile);
+				result.addAll(parseFromStrings(lines, titleKey, worldWidth,
+						worldHeight, matchingFile.getName(), attributeKeys));
 			}
 			
 		} catch (Exception ex) {
@@ -464,6 +430,104 @@ public class WorldSetup {
 		}
 
 		return result.toArray(new WorldSetup[result.size()]);
+	}
+	
+	/**
+	 * Parses (one or many) world setups from the specified Strings.
+	 * 
+	 * @param lines
+	 *            A list of Strings containing the contents of a world setup
+	 *            file.
+	 * @param titleKey
+	 *            The key to recognize the start of the world setup inside the
+	 *            file, e.g. "World:". The characters following the key will be
+	 *            used as title.
+	 * @param worldWidth
+	 *            the width or -1 if it should be specified through width
+	 *            attribute or from length of actor lines in the file.
+	 * @param worldHeight
+	 *            the height or -1 if it should be specified through height
+	 *            attribute or from height of actor lines in the file.
+	 * @param fileName
+	 *            The filename where the Strings were retrieved from or
+	 *            <code>null</code>.
+	 * @param attributeKeys
+	 *            Keys for optional attributes, e.g. "Password:".
+	 * @return the world setups as an array
+	 */
+	private static List<WorldSetup> parseFromStrings(List<String> lines,
+			String titleKey, int worldWidth, int worldHeight, String fileName,
+			String... attributeKeys) {
+		List<WorldSetup> result = new ArrayList<WorldSetup>();
+		Builder currentBuilder = null;
+		
+		// Go trough all lines of the file
+		for (String line : lines) {
+			if (!line.startsWith(";")) {
+				if (line.startsWith(titleKey)) {
+					if (currentBuilder != null) {
+						result.add(currentBuilder.build());
+					}
+					currentBuilder = new Builder(titleKey);
+					currentBuilder.setTitle(line.substring(titleKey.length()).trim());
+					currentBuilder.setFileName(fileName);
+					
+					if (worldWidth > -1 && worldHeight > -1) {
+						currentBuilder.setWidth(worldWidth);
+						currentBuilder.setHeight(worldHeight);
+					}
+					continue;
+				} else if (currentBuilder == null) {
+					continue; // continue until we have the first valid
+								// world setup title key
+				}
+
+				if (line.startsWith(WIDTH_KEY)) {
+					try {
+						currentBuilder.setWidth(Integer.parseInt(line
+								.substring(WIDTH_KEY.length()).trim()));
+						continue;
+					} catch (NumberFormatException e) {
+						// do nothing
+					}
+				}
+
+				if (line.startsWith(HEIGHT_KEY)) {
+					try {
+						currentBuilder
+								.setHeight(Integer.parseInt(line
+										.substring(HEIGHT_KEY.length())
+										.trim()));
+						continue;
+					} catch (NumberFormatException e) {
+						// do nothing
+					}
+				}
+
+				boolean foundAttribute = false;
+				for (String attributeKey : attributeKeys) {
+					if (line.startsWith(attributeKey)) {
+						currentBuilder.addAttribute(attributeKey, line
+								.substring(attributeKey.length())
+								.trim());
+						foundAttribute = true;
+						break;
+					}
+				}
+				if (foundAttribute) {
+					continue;
+				}
+
+				if (line.matches("[@#.$\\s*+]*")) {
+					currentBuilder.addActorLine(line);
+				}
+			}
+		}
+		// add the last world setup
+		if (currentBuilder != null) {
+			result.add(currentBuilder.build());
+		}
+		return result;
 	}
 
 	/**
@@ -484,7 +548,7 @@ public class WorldSetup {
 			// Option 1: try to get file relative to class
 			if (clazz != null) {
 				File dir = new File(clazz.getResource(".").toURI());
-				List<File> files = FileUtil.scan(dir, fileName);
+				List<File> files = FileUtils.scan(dir, fileName);
 				if (!files.isEmpty()) {
 					return files;
 				}
@@ -492,20 +556,21 @@ public class WorldSetup {
 			
 			// Option 2: try to get file relative to package root (may be inside jar)
 			File dir2 = new File(Thread.currentThread().getContextClassLoader().getResource(".").toURI());
-			List<File> files2 = FileUtil.scan(dir2, fileName);
+			List<File> files2 = FileUtils.scan(dir2, fileName);
 			if (!files2.isEmpty()) {
 				return files2;
 			}
 			
 			// Option 3: try to get file relative to project root (outside of jar)
 			File dir3 = new File(".");
-			List<File> files3 = FileUtil.scan(dir3, fileName);
+			List<File> files3 = FileUtils.scan(dir3, fileName);
 			if (!files3.isEmpty()) {
 				// Note: only get the first match
 				return files3;
 			}
 		} catch (URISyntaxException e) {
 			// do nothing
+			e.printStackTrace();
 		}
 		
 		// Return empty list
@@ -745,7 +810,7 @@ public class WorldSetup {
 	/**
 	 * Utility class for loading and saving files.
 	 */
-	public static class FileUtil {
+	public static class FileUtils {
 
 		/**
 		 * Opens a file chooser dialog to ask the user for a filename. If
@@ -800,7 +865,7 @@ public class WorldSetup {
 						&& !chosenFile.getName().endsWith(".TXT")) {
 					chosenFile = new File(chosenFile.getAbsolutePath() + ".txt");
 				}
-				Files.write(chosenFile.toPath(), content.getBytes());
+				FileUtils.writeToFile(chosenFile, content);
 			}
 		}
 
@@ -856,5 +921,74 @@ public class WorldSetup {
 			}
 			return false;
 		}
+		
+	    /**
+		 * Read all lines from a file.
+		 * 
+		 * @param file
+		 *            the file to read from
+		 * @return the lines from the file as a {@code List}.
+		 * 
+		 * @throws IOException
+		 *             if an I/O error occurs reading from the file.
+		 */
+	    public static List<String> readAllLines(File file) throws IOException {
+	    	return readAllLines(new FileInputStream(file));
+	    }
+	    
+	    /**
+		 * Read all lines from an InputStream.
+		 * 
+		 * @param stream
+		 *            the stream to read from
+		 * @return the lines from the stream as a {@code List}.
+		 * 
+		 * @throws IOException
+		 *             if an I/O error occurs reading from the stream.
+		 */
+	    public static List<String> readAllLines(InputStream stream) throws IOException {
+	    	List<String> result = new ArrayList<String>();
+	    	BufferedReader reader = null;
+	    	try {
+	    		reader = new BufferedReader(new InputStreamReader(stream)); 
+	    		
+	    		for (;;) {
+	    			String line = reader.readLine();
+	    			if (line == null) {
+	    				break;
+	    			}
+	    			result.add(line);
+	    		}
+	    	} finally {
+	    		if (reader != null) {
+	    			reader.close();
+	    		}
+	    	}
+            return result;
+	    }
+	    
+	    /**
+		 * Writes to the specified file.
+		 * 
+		 * @param file
+		 *            The file to write to
+		 * @param content
+		 *            The content to write.
+		 * @throws IOException
+		 *             if an I/O error occurs writing to the file.
+		 */
+	    public static void writeToFile(File file, String content) throws IOException {
+	    	FileWriter fstream = new FileWriter(file);
+	    	BufferedWriter out = new BufferedWriter(fstream);
+			try {
+				out.write(content);
+				out.flush();
+			} finally {
+				// Close the output stream
+				if (out != null) {
+					out.close();
+				}
+			}
+	    }
 	}
 }

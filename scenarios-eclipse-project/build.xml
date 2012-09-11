@@ -29,6 +29,16 @@
 		<mkdir dir="${zipFolder}" />
 	</target>
 
+	<target name="buildScenarioChapter4Only">
+		<delete dir="${targetScenariosFolder}" />
+		<mkdir dir="${targetScenariosFolder}" />
+		<antcall target="doBuildSokobanScenario">
+			<param name="chapter" value="chapter-4" />
+			<param name="scenarioNumber" value="26" />
+			<param name="scenarioTitle" value="Kara Sokoban" />
+		</antcall>
+	</target>
+	
 
 	<target name="buildScenarios" description="Distribute to individual scenarios">
 		<!-- Chapter 1 -->		
@@ -347,10 +357,11 @@
 		<copy todir="${scenarioSolutionFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Copy skin -->
+		<!-- Copy skin
 		<copy todir="${scenarioSolutionFolder}/images" overwrite="true" >
 			<fileset dir="skin" />
 		</copy>
+		 -->
 		<!-- Rename the MyKaraSolution class -->
 		<move file="${scenarioSolutionFolder}/MyKaraSokoban${scenarioNumber}Solution.java" tofile="${scenarioSolutionFolder}/MyKaraSokoban.java" />
 		<replace file="${scenarioSolutionFolder}/MyKaraSokoban.java" token="MyKaraSokoban${scenarioNumber}Solution" value="MyKaraSokoban"/>

@@ -78,8 +78,6 @@ public class GameScreen extends KaraWorld {
 
 		setPaintOrder(Label.class, Kara.class, Tree.class, Mushroom.class,
 				Leaf.class);
-	
-		prepare();
 	}
 		
 	protected void prepare() {

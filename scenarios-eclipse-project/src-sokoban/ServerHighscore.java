@@ -1,4 +1,6 @@
 import greenfoot.*;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -10,20 +12,15 @@ import java.util.List;
  * 
  * UserInfo is originally designed to have only one highscore but we need one
  * highscore for every level. To work around this limitation, we use the
- * available integers and Strings to store the users moves for each level. The
- * score is simply incremented whenever someone adds a new highscore entry. Then
- * we can use the score to get the most recently added players and compare their
- * moves in each level.
+ * available Strings to store the users moves for each level. The score is
+ * simply incremented whenever someone adds a new highscore entry. Then we can
+ * use the score to get the most recently added players and compare their moves
+ * in each level.
  * <p>
  * 
- * We can save move information for a maximum of 105 levels. For each level we
- * store a maximum of 999 moves. <br>
- * The UserInfo can store 10 integers and 5 Strings of 50 characters (at the
- * moment). In an integer we can store 3 levels, in a String 15 levels. This
- * makes the following calcualtion: <br>
- * 3 levels * 10 integers = 30 <br>
- * 15 levels * 5 Strings = 75 <br>
- * Total levels: 105
+ * For each level we store the moves in a single char. The UserInfo can store 5
+ * Strings of 50 characters (at the moment). So we can save move information for
+ * a maximum of 250 levels.
  * <p>
  * Note: Every User will only be stored once for every level, e.g. it is not
  * possible for one user to be on first and second place.
@@ -109,35 +106,40 @@ public class ServerHighscore extends HighscoreManager {
 	 */
 	public void setHighscore(Highscore highscore) {
 		if (myUserInfo == null) {
-			// End if user is not logged in
+			// return if user is not logged in
 			return;
 		}
 
 		// Find the new moves of the current user in high score and store it
-		if (highscore.getFirstEntry().getName()
-				.equals(myUserInfo.getUserName())) {
+		if (highscore.getFirstEntry().getName().equals(myUserInfo.getUserName())) {
 			Highscore h = getHighscoreForLevel(highscore.getLevelNumber());
 			h.addHighscoreEntry(highscore.getFirstEntry());
 			highscores.put(highscore.getLevelNumber(), h);
 
-			saveToMyInfo(highscore.getLevelNumber(), highscore.getFirstEntry()
-					.getMoves());
-		} else if (highscore.getSecondEntry().getName()
-				.equals(myUserInfo.getUserName())) {
+			setToMyInfo(highscore.getLevelNumber(), highscore.getFirstEntry().getMoves());
+			// Set the new score and save
+			myUserInfo.setScore(newScore());
+			myUserInfo.store();
+			
+		} else if (highscore.getSecondEntry().getName().equals(myUserInfo.getUserName())) {
 			Highscore h = getHighscoreForLevel(highscore.getLevelNumber());
 			h.addHighscoreEntry(highscore.getSecondEntry());
 			highscores.put(highscore.getLevelNumber(), h);
 
-			saveToMyInfo(highscore.getLevelNumber(), highscore.getSecondEntry()
-					.getMoves());
-		} else if (highscore.getThirdEntry().getName()
-				.equals(myUserInfo.getUserName())) {
+			setToMyInfo(highscore.getLevelNumber(), highscore.getSecondEntry().getMoves());
+			// Set the new score and save
+			myUserInfo.setScore(newScore());
+			myUserInfo.store();
+			
+		} else if (highscore.getThirdEntry().getName().equals(myUserInfo.getUserName())) {
 			Highscore h = getHighscoreForLevel(highscore.getLevelNumber());
 			h.addHighscoreEntry(highscore.getThirdEntry());
 			highscores.put(highscore.getLevelNumber(), h);
 
-			saveToMyInfo(highscore.getLevelNumber(), highscore.getThirdEntry()
-					.getMoves());
+			setToMyInfo(highscore.getLevelNumber(), highscore.getThirdEntry().getMoves());
+			// Set the new score and save
+			myUserInfo.setScore(newScore());
+			myUserInfo.store();
 		}
 
 		// other users can't be stored --> do nothing
@@ -150,164 +152,202 @@ public class ServerHighscore extends HighscoreManager {
 	private void initHighscoresFromUserInfos() {
 		highscores = new HashMap<Integer, Highscore>();
 
-		// Get the top UserInfos: The maximum would be 315 (3 places in 105
-		// levels), but
-		// it is very unlikely that there are 315 distinct players in the
-		// highscore of
-		// all 105 levels! So we take the first 100.
-		List<UserInfo> userInfos = UserInfo.getTop(100);
+		// Get the top UserInfos: The maximum would be 750 (3 places in 250
+		// levels), but it is very unlikely that there are 750 distinct players
+		// in the highscore of all 250 levels! So we take the last 200.
+		List<UserInfo> userInfos = UserInfo.getTop(200);
 
-		// Save the top score
+		// Get the current top score
 		if (!userInfos.isEmpty()) {
 			topScore = userInfos.get(0).getScore();
 		}
 
 		for (UserInfo userInfo : userInfos) {
-			processUserInfo(userInfo);
+			Map<Integer, Integer> userLevelMoves = retrieveLevelMoves(userInfo);
+			for (Map.Entry<Integer, Integer> levelMove : userLevelMoves.entrySet()) {
+				int level = levelMove.getKey();
+				int moves = levelMove.getValue();
+				Highscore h = highscores.get(level);
+				if (h == null) {
+					h = new Highscore(level);
+					highscores.put(level, h);
+				}
+				h.addHighscoreEntry(userInfo.getUserName(), moves);
+			}
 		}
 	}
 
 	/**
-	 * Processes the UserInfo and adds them to the highscore map.
+	 * Retrieves the moves per level from the specified UserInfo. Only
+	 * entries with moves > 0 are added.
+	 * 
+	 * @param userInfo
+	 * @return A map with the level number as a key and the moves
+	 *         as a value.
 	 */
-	private void processUserInfo(UserInfo userInfo) {
-		int currentLevel = 1;
+	private Map<Integer, Integer> retrieveLevelMoves(UserInfo userInfo) {
+		Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+		
+		// To transform legacy highscore entries
+		// TODO: Remove this
+		if (userInfo.getScore() < 61) {
+			result = legacyRetrieveHighscores(userInfo);
 
-		// process stored integers
-		for (int i = 0; i < 10; i++) {
-			// decode the moves for next three levels
-			int encodedMoves = userInfo.getInt(i);
-			int[] decodedMoves = decodeInt(encodedMoves);
-
-			for (int moves : decodedMoves) {
-				if (moves > 0) {
-					Highscore h = highscores.get(currentLevel);
-					if (h == null) {
-						h = new Highscore(currentLevel);
-						highscores.put(currentLevel, h);
-					}
-					h.addHighscoreEntry(userInfo.getUserName(), moves);
+			// if it's the current user --> save in the new format for later
+			if (userInfo.getUserName().equals(myUserInfo.getUserName())) {
+				for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
+					setToMyInfo(entry.getKey(), entry.getValue());
 				}
-				currentLevel++;
+				// Set the new score and save
+				myUserInfo.setScore(newScore());
+				myUserInfo.store();
 			}
+			
+			return result;
 		}
-
-		// process stored Strings
+		
+		
+		// process the 5 stored Strings (each containing max 50 levels)
 		for (int i = 0; i < 5; i++) {
 			String encodedMoves = userInfo.getString(i);
-
-			int[] decodedMoves = decodeString(encodedMoves);
-
-			for (int moves : decodedMoves) {
-				if (moves > 0) {
-					Highscore h = highscores.get(currentLevel);
-					if (h == null) {
-						h = new Highscore(currentLevel);
-						highscores.put(currentLevel, h);
-					}
-					h.addHighscoreEntry(userInfo.getUserName(), moves);
+			int[] decodedMoves = decode(encodedMoves);
+	
+			for (int j = 0; j < decodedMoves.length; j++) {
+				if (decodedMoves[j] > 0) {
+					int currentLevel = i * 50 + j + 1;
+					result.put(currentLevel, decodedMoves[j]);
 				}
-				currentLevel++;
 			}
 		}
+		
+		return result;
 	}
-
+	
 	/**
-	 * Savest the number of moves for the given level to the current users
+	 * Sets the number of moves for the given level to the current users
 	 * UserInfo.
+	 * 
+	 * @param levelNumber
+	 *            level number between 1 and 250
+	 * @param moves
+	 *            number of moves, between 1 and 65535. 0 moves means that there
+	 *            is no highscore for that level.
 	 */
-	private void saveToMyInfo(int levelNumber, int moves) {
-		if (levelNumber <= 30) {
-			// For Level 30 and below, the moves are stored in UserInfo ints
-			int userInfoIndex = (levelNumber - 1) / 3;
-			int arrayIndex = (levelNumber - 1) % 3;
-
-			// get and decode
-			int[] userInfoInts = decodeInt(myUserInfo.getInt(userInfoIndex));
-			userInfoInts[arrayIndex] = moves;
-
-			// encode and set
-			myUserInfo.setInt(userInfoIndex, encodeInt(userInfoInts));
-		} else if (levelNumber <= 105) {
-			// Above level 30, the moves are stored in UserInfo Strings
-			int userInfoIndex = (levelNumber - 31) / 15;
-			int arrayIndex = (levelNumber - 31) % 15;
-
-			// get and decode
-			int[] userInfoInts = decodeString(myUserInfo
-					.getString(userInfoIndex));
-			userInfoInts[arrayIndex] = moves;
-
-			// encode and set
-			myUserInfo.setString(userInfoIndex, encodeString(userInfoInts));
-		} else {
-			// do nothing if level > 105
+	private void setToMyInfo(int levelNumber, int moves) {
+		if (levelNumber < 1 || levelNumber > 250) {
 			return;
 		}
 
-		// Calc and set the new score and save
-		myUserInfo.setScore(newScore());
-		myUserInfo.store();
+		int userInfoIndex = (levelNumber - 1) / 50;
+		int charIndex = (levelNumber - 1) % 50;
+
+		// get the relevant user info string and decode it
+		int[] userInfoInts = decode(myUserInfo.getString(userInfoIndex));
+		// set the moves at the specified index
+		userInfoInts[charIndex] = (char) moves;
+
+		// encode again and set to UserInfo
+		myUserInfo.setString(userInfoIndex, encode(userInfoInts));
 	}
 
 	/**
+	 * Decodes the specified string into an array of exactly 50 integers. Each
+	 * integer is between 0 and 65535. 0 means that there is no move.
+	 * 
+	 * @param encoded
+	 *            The encoded String.
+	 * @return an array of 50 integers between 0 and 65535.
+	 */
+	private static int[] decode(String encoded) {
+		int[] dec = new int[50];
+		Arrays.fill(dec, 0);
+
+		for (int i = 0; i < encoded.length() && i < 50; i++) {
+			dec[i] = (int) encoded.charAt(i);
+		}
+		return dec;
+	}
+	
+	/**
+	 * Encodes the array of integers into a String with length 50. Each int is
+	 * saved as a single char and must therefore be between 0 and 65535.
+	 * 
+	 * @param numbers
+	 *            an array of integers (maximum 50) between 0 and 65535
+	 * @return the encoded String with length 50
+	 */
+	private static String encode(int[] numbers) {
+		StringBuffer buf = new StringBuffer();
+		if (numbers != null) {
+			for (int i = 0; i < numbers.length && i < 50; i++) {
+				int number = Math.min(65535, numbers[i]); // maximum of 65535
+				number = Math.max(0, number); // minimum of 0
+				buf.append((char) number);
+			}
+		}
+		while (buf.length() < 50) {
+			buf.append((char) 0);
+		}
+		return buf.toString();
+	}
+	
+	/**
 	 * Creates a new score for the current user. It takes the current highest
-	 * score and adds 1. This way we can always be shure that the top 315
-	 * players are all possible players in any of the highscores.
+	 * score and adds 1. This way we can always be shure that the top 750
+	 * (3*250) players are all possible players in any of the highscores.
 	 */
 	private int newScore() {
 		return topScore + 1;
 	}
 
 	/**
-	 * Encodes the specified integers into one integer. The specified integers
-	 * must be maximum 3 and each smaller or equal to 999.
+	 * Handles legacy user info and saves the current user info in the new
+	 * format.
+	 * 
+	 * @param userInfo
+	 * @deprecated
 	 */
-	private int encodeInt(int[] dec) {
-		if (dec.length > 3)
-			throw new IllegalArgumentException();
-
-		int result = 1000000000; // add 1 billion, otherwise leading 0s will not
-									// be visible
-		for (int i = 0; i < dec.length; i++) {
-			int decInRange = Math.max(Math.min(dec[i], 999), 0);
-
-			result += decInRange * Math.pow(1000, (2 - i));
-		}
-		return result;
-	}
-
-	/**
-	 * Encodes the specified integers into one String. The integers must be a
-	 * maximum of 15 and each smaller or equal to 999. The Strings are appended.
-	 */
-	private String encodeString(int[] dec) {
-		if (dec.length > 15)
-			throw new IllegalArgumentException();
-
-		StringBuffer result = new StringBuffer();
-		for (int i = 0; i < dec.length && i < 15; i++) {
-			int decInRange = Math.max(Math.min(dec[i], 999), 0);
-
-			// write leading 0
-			if (decInRange < 100) {
-				result.append("0");
-				if (decInRange < 10) {
-					result.append("0");
+	private Map<Integer, Integer> legacyRetrieveHighscores(UserInfo userInfo) {
+		Map<Integer, Integer> result = new HashMap<Integer, Integer>();
+		
+		int currentLevel = 1;
+	
+		// process stored integers
+		for (int i = 0; i < 10; i++) {
+			// decode the moves for next three levels
+			int encodedMoves = userInfo.getInt(i);
+			int[] decodedMoves = legacyDecodeInt(encodedMoves);
+	
+			for (int moves : decodedMoves) {
+				if (moves > 0) {
+					result.put(currentLevel, moves);
 				}
+				currentLevel++;
 			}
-
-			result.append(decInRange);
 		}
-
-		return result.toString();
+	
+		// process stored Strings
+		for (int i = 0; i < 5; i++) {
+			String encodedMoves = userInfo.getString(i);
+			int[] decodedMoves = legacyDecodeString(encodedMoves);
+	
+			for (int moves : decodedMoves) {
+				if (moves > 0) {
+					result.put(currentLevel, moves);
+				}
+				currentLevel++;
+			}
+		}
+		
+		return result;
 	}
 
 	/**
 	 * Decodes the specified encoded integer into an array of exactly three
 	 * integers (each smaller or equal to 999).
+	 * @deprecated
 	 */
-	private int[] decodeInt(int encoded) {
+	private int[] legacyDecodeInt(int encoded) {
 		int[] dec = new int[3];
 		dec[0] = encoded / 1000000 % 1000;
 		dec[1] = (encoded / 1000) % 1000;
@@ -318,8 +358,9 @@ public class ServerHighscore extends HighscoreManager {
 	/**
 	 * Decodes the specified string into an array of exactly 15 integers. Each
 	 * integer is smaller or equal to 999.
+	 * @deprecated
 	 */
-	private int[] decodeString(String encoded) {
+	private int[] legacyDecodeString(String encoded) {
 		int[] dec = new int[15];
 		for (int i = 0; i < encoded.length() / 3 && i < 15; i++) {
 			try {
