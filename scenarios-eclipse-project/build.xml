@@ -29,17 +29,6 @@
 		<mkdir dir="${zipFolder}" />
 	</target>
 
-	<target name="buildScenarioChapter4Only">
-		<delete dir="${targetScenariosFolder}" />
-		<mkdir dir="${targetScenariosFolder}" />
-		<antcall target="doBuildSokobanScenario">
-			<param name="chapter" value="chapter-4" />
-			<param name="scenarioNumber" value="26" />
-			<param name="scenarioTitle" value="Kara Sokoban" />
-		</antcall>
-	</target>
-	
-
 	<target name="buildScenarios" description="Distribute to individual scenarios">
 		<!-- Chapter 1 -->		
 		<antcall target="doBuildScenario">

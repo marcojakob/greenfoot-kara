@@ -206,7 +206,6 @@ public class ServerHighscore extends HighscoreManager {
 			return result;
 		}
 		
-		
 		// process the 5 stored Strings (each containing max 50 levels)
 		for (int i = 0; i < 5; i++) {
 			String encodedMoves = userInfo.getString(i);
@@ -216,6 +215,21 @@ public class ServerHighscore extends HighscoreManager {
 				if (decodedMoves[j] > 0) {
 					int currentLevel = i * 50 + j + 1;
 					result.put(currentLevel, decodedMoves[j]);
+				}
+			}
+		}
+		
+		// fix scores of danpost for the last three levels that are new
+		// TODO: Remove
+		if (userInfo.getScore() == 62) {
+			result.put(106, 0);
+			result.put(107, 0);
+			result.put(108, 0);
+			
+			// if it's the current user --> save in the new format for later
+			if (userInfo.getUserName().equals(myUserInfo.getUserName())) {
+				for (int i = 106; i < 251; i++) {
+					setToMyInfo(i, 0);
 				}
 			}
 		}
