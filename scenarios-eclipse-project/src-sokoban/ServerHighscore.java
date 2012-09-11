@@ -320,7 +320,12 @@ public class ServerHighscore extends HighscoreManager {
 	
 			for (int moves : decodedMoves) {
 				if (moves > 0) {
-					result.put(currentLevel, moves);
+					if (moves == 999) {
+						// change legacy moves of 999 to 9999
+						result.put(currentLevel, 9999);
+					} else {
+						result.put(currentLevel, moves);
+					}
 				}
 				currentLevel++;
 			}
@@ -333,7 +338,12 @@ public class ServerHighscore extends HighscoreManager {
 	
 			for (int moves : decodedMoves) {
 				if (moves > 0) {
-					result.put(currentLevel, moves);
+					if (moves == 999) {
+						// change legacy moves of 999 to 9999
+						result.put(currentLevel, 9999);
+					} else {
+						result.put(currentLevel, moves);
+					}
 				}
 				currentLevel++;
 			}
