@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="src-io"/>
-	<classpathentry kind="src" path="src-sokoban"/>
 	<classpathentry kind="src" path="src-chapter-1"/>
 	<classpathentry kind="src" path="src-chapter-2"/>
 	<classpathentry kind="src" path="src-chapter-3"/>

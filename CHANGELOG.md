@@ -1,17 +1,24 @@
-# Changelog
+# Changelog #
 
-## GreenfootKara 1.4
+## GreenfootKara 2.0, not released ##
+
 * Major changes to be able to work with an eclipse project to generate
 	Greenfoot scenarios.
-* Corrected little bug in Exercise 12.
+* Created a new class for every scenario called WorldSetup that reades the world setup
+	(all character positions) from a world setup text file.
+* Added method to save the world setup to either the console or a text file (in ASCII).
 * Kara now has a stop() method to stop the simulation cycle. Now we can always use the
 	run button. This gives us the ability to always use the run-Button and still 
 	have a program that terminates. Greenfoot 2.1.2 has a problem with the act-button
 	so that the first act() is executed after a compile, the delay() method is ignored
 	and thus Kara moves very fast to the end.
+* Kara Sokoban contains now an example of alternative images (skin). See Kara Sokoban
+	Solution.
+* Corrected little bug in Exercise 12.
 
 
-## GreenfootKara 1.3, 2012-07-04
+## GreenfootKara 1.3, 2012-07-04 ##
+
 * English and German:
 ** Most code comments that usually only teachers read are in English
 ** Javadoc for Kara and MyKara are in English and German
@@ -46,6 +53,7 @@
 * Updated the Sheet about Teacher Information.
 	
 
-## GreenfootKara 1.2, 2012-01-04
+## GreenfootKara 1.2, 2012-01-04 ##
+
 * Reordering of scenarios. Now they are ordered by chapter instead of day.
 * Some minor spelling corrections

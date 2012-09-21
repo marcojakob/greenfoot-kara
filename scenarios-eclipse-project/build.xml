@@ -8,19 +8,7 @@
 	<property name="zipFolder">targetZips</property>
 	<property name="jarName">GreenKara-${version}.jar</property>
 
-	
 	<target name="main" depends="prepareScenarios, buildScenarios" />
-
-	<target name="copyToTarget" description="Copy files to target directory">
-		<delete dir="${targetFolder}" />
-		<mkdir dir="${targetFolder}" />
-		<copy todir="${targetFolder}/lib">
-			<fileset file="lib/*.jar" />
-		</copy>
-		<copy todir="${targetFolder}/images">
-			<fileset dir="images" />
-		</copy>
-	</target>
 
 	<target name="prepareScenarios" >
 		<delete dir="${targetScenariosFolder}" />
@@ -30,7 +18,7 @@
 	</target>
 
 	<target name="buildScenarios" description="Distribute to individual scenarios">
-		<!-- Chapter 1 -->		
+		<!-- Chapter 1 -->
 		<antcall target="doBuildScenario">
 			<param name="chapter" value="chapter-1" />
 			<param name="scenarioNumber" value="01" />
@@ -58,8 +46,8 @@
 		<antcall target="doZipChapter">
 			<param name="chapterName" value="scenarios-chapter-1-solutions" />
 		</antcall>
-		
-		<!-- Chapter 2 -->		
+
+		<!-- Chapter 2 -->
 		<antcall target="doBuildScenario">
 			<param name="chapter" value="chapter-2" />
 			<param name="scenarioNumber" value="09" />
@@ -117,7 +105,7 @@
 		<antcall target="doZipChapter">
 			<param name="chapterName" value="scenarios-chapter-2-solutions" />
 		</antcall>
-		
+
 		<!-- Chapter 3 -->
 		<antcall target="doBuildScenario">
 			<param name="chapter" value="chapter-3" />
@@ -151,7 +139,7 @@
 		<antcall target="doZipChapter">
 			<param name="chapterName" value="scenarios-chapter-3-solutions" />
 		</antcall>
-		
+
 		<!-- Chapter 4 -->
 		<antcall target="doBuildSokobanScenario">
 			<param name="chapter" value="chapter-4" />
@@ -165,7 +153,7 @@
 		<antcall target="doZipChapter">
 			<param name="chapterName" value="scenarios-chapter-4-solutions" />
 		</antcall>
-		
+
 		<!-- Chapter 5 -->
 		<antcall target="doBuildIOScenario">
 			<param name="chapter" value="chapter-5" />
@@ -199,165 +187,183 @@
 
 	<target name="doBuildScenario">
 		<echo>Building ${chapter} Scenario ${scenarioNumber} ${scenarioTitle}</echo>
-		<property name="chapterExercises" value="${targetScenariosFolder}/scenarios-${chapter}"/>
-		<property name="chapterSolutions" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
-		<property name="scenarioExerciseFolder" value="${chapterExercises}/Kara ${scenarioNumber} ${scenarioTitle}"/>
-		<property name="scenarioSolutionFolder" value="${chapterSolutions}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
-		<property name="myKaraFile" value="src-${chapter}/MyKara${scenarioNumber}.java"/>
-		<property name="myKaraSolutionFile" value="src-${chapter}/MyKara${scenarioNumber}Solution.java"/>
-		<!-- find the world setup text file -->
-		<path id="worldSetupFileId"> 
-		    <fileset dir="src-${chapter}"> 
-		        <include name="World${scenarioNumber}*.txt"/> 
-		     </fileset> 
-		</path> 
-		<property name="worldSetupFile" refid="worldSetupFileId"/> 
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
 
 		<!-- Copy to scenarios EXERCISE folder -->
-		<mkdir dir="${scenarioExerciseFolder}" />
-		<copy todir="${scenarioExerciseFolder}">
-			<fileset dir="src" excludes="MyKara.java"/>
-			<fileset file="${myKaraFile}" />
-			<fileset file="${worldSetupFile}" />
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraSolution.java" />
+			<fileset file="greenfoot/*.*" />
 		</copy>
-		<copy todir="${scenarioExerciseFolder}/images">
+		<copy todir="${scenarioExerciseSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Rename the MyKara*.java class to MyKara.java -->
-		<move file="${scenarioExerciseFolder}/MyKara${scenarioNumber}.java" tofile="${scenarioExerciseFolder}/MyKara.java" />
-		<replace file="${scenarioExerciseFolder}/MyKara.java" token="MyKara${scenarioNumber}" value="MyKara"/>
-		
-		
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
 		<!-- Copy to scenarios SOLUTION folder -->
-		<mkdir dir="${scenarioSolutionFolder}" />
-		<copy todir="${scenarioSolutionFolder}">
-			<fileset dir="src" excludes="MyKara.java" />
-			<fileset file="${myKaraSolutionFile}" />
-			<fileset file="${worldSetupFile}" />
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKara.java" />
+			<fileset file="greenfoot/*.*" />
 		</copy>
-		<copy todir="${scenarioSolutionFolder}/images">
+		<copy todir="${scenarioSolutionSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
 		<!-- Rename the MyKaraSolution class -->
-		<move file="${scenarioSolutionFolder}/MyKara${scenarioNumber}Solution.java" tofile="${scenarioSolutionFolder}/MyKara.java" />
-		<replace file="${scenarioSolutionFolder}/MyKara.java" token="MyKara${scenarioNumber}Solution" value="MyKara"/>
+		<move file="${scenarioSolutionSubFolder}/MyKaraSolution.java" tofile="${scenarioSolutionSubFolder}/MyKara.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKara.java" token="MyKaraSolution" value="MyKara"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
 	</target>
 
-	
-	
+
+
 	<target name="doBuildIOScenario">
 		<echo>Building ${chapter} IO Scenario ${scenarioNumber} ${scenarioTitle}</echo>
-		<property name="chapterExercises" value="${targetScenariosFolder}/scenarios-${chapter}"/>
-		<property name="chapterSolutions" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
-		<property name="scenarioExerciseFolder" value="${chapterExercises}/Kara ${scenarioNumber} ${scenarioTitle}"/>
-		<property name="scenarioSolutionFolder" value="${chapterSolutions}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
-		<property name="myKaraFile" value="src-${chapter}/MyKaraIO${scenarioNumber}.java"/>
-		<property name="myKaraSolutionFile" value="src-${chapter}/MyKaraIO${scenarioNumber}Solution.java"/>
-		<!-- find the world setup text file -->
-		<path id="worldSetupFileId"> 
-		    <fileset dir="src-${chapter}"> 
-		        <include name="World${scenarioNumber}*.txt"/> 
-		     </fileset> 
-		</path> 
-		<property name="worldSetupFile" refid="worldSetupFileId"/> 
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
 
 		<!-- Copy to scenarios EXERCISE folder -->
-		<mkdir dir="${scenarioExerciseFolder}" />
-		<copy todir="${scenarioExerciseFolder}">
-			<fileset dir="src" excludes="MyKara.java, project.greenfoot, README.TXT"/>
-			<fileset dir="src-io" excludes="MyKaraIO.java"/>
-			<fileset file="${myKaraFile}" />
-			<fileset file="${worldSetupFile}" />
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/io" includes="*" excludes="MyKaraIO.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraIOSolution.java" />
+			<fileset file="greenfoot/io/*.*" />
 		</copy>
-		<copy todir="${scenarioExerciseFolder}/images">
+		<copy todir="${scenarioExerciseSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Rename the MyKara*.java class to MyKara.java -->
-		<move file="${scenarioExerciseFolder}/MyKaraIO${scenarioNumber}.java" tofile="${scenarioExerciseFolder}/MyKaraIO.java" />
-		<replace file="${scenarioExerciseFolder}/MyKaraIO.java" token="MyKaraIO${scenarioNumber}" value="MyKaraIO"/>
-		<replace file="${scenarioExerciseFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
-		
-		
+		<!-- Rename MyKara to MyKaraIO in KaraWorld -->
+		<replace file="${scenarioExerciseSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
 		<!-- Copy to scenarios SOLUTION folder -->
-		<mkdir dir="${scenarioSolutionFolder}" />
-		<copy todir="${scenarioSolutionFolder}">
-			<fileset dir="src" excludes="MyKara.java, project.greenfoot, README.TXT" />
-			<fileset dir="src-io" excludes="MyKaraIO.java" />
-			<fileset file="${myKaraSolutionFile}" />
-			<fileset file="${worldSetupFile}" />
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/io" includes="*" excludes="MyKaraIO.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraIO.java" />
+			<fileset file="greenfoot/io/*.*" />
 		</copy>
-		<copy todir="${scenarioSolutionFolder}/images">
+		<copy todir="${scenarioSolutionSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Rename the MyKaraSolution class -->
-		<move file="${scenarioSolutionFolder}/MyKaraIO${scenarioNumber}Solution.java" tofile="${scenarioSolutionFolder}/MyKaraIO.java" />
-		<replace file="${scenarioSolutionFolder}/MyKaraIO.java" token="MyKaraIO${scenarioNumber}Solution" value="MyKaraIO"/>
-		<replace file="${scenarioSolutionFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
+		<!-- Rename MyKara to MyKaraIO in KaraWorld -->
+		<replace file="${scenarioSolutionSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
+		<!-- Rename the MyKaraIOSolution class to MyKaraIO -->
+		<move file="${scenarioSolutionSubFolder}/MyKaraIOSolution.java" tofile="${scenarioSolutionSubFolder}/MyKaraIO.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKaraIO.java" token="MyKaraIOSolution" value="MyKaraIO"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
 	</target>
 
-	
-	
+
+
 	<target name="doBuildSokobanScenario">
 		<echo>Building ${chapter} Sokoban Scenario ${scenarioNumber} ${scenarioTitle}</echo>
-		<property name="chapterExercises" value="${targetScenariosFolder}/scenarios-${chapter}"/>
-		<property name="chapterSolutions" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
-		<property name="scenarioExerciseFolder" value="${chapterExercises}/Kara ${scenarioNumber} ${scenarioTitle}"/>
-		<property name="scenarioSolutionFolder" value="${chapterSolutions}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
-		<property name="myKaraFile" value="src-${chapter}/MyKaraSokoban${scenarioNumber}.java"/>
-		<property name="myKaraSolutionFile" value="src-${chapter}/MyKaraSokoban${scenarioNumber}Solution.java"/>
-		
-		<!-- find the world setup text file -->
-		<property name="levelFile" value="src-${chapter}/Levels.txt" /> 
-		<property name="levelBoxxleFile" value="src-${chapter}/LevelsBoxxle1.txt" /> 
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
 
 		<!-- Copy to scenarios EXERCISE folder -->
-		<mkdir dir="${scenarioExerciseFolder}" />
-		<copy todir="${scenarioExerciseFolder}">
-			<fileset dir="src" excludes="MyKara.java, project.greenfoot, README.TXT"/>
-			<fileset dir="src-sokoban" excludes="MyKaraSokoban.java"/>
-			<fileset file="${myKaraFile}" />
-			<fileset file="${levelFile}" />
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/sokoban" includes="*" excludes="MyKaraSokoban.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" 
+				excludes="**/MyKaraSokobanSolution.java, **/LevelsBoxxle1.txt" />
+			<fileset file="greenfoot/sokoban/*.*" />
 		</copy>
-		<copy todir="${scenarioExerciseFolder}/images">
+		<copy todir="${scenarioExerciseSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Rename the MyKara*.java class to MyKara.java -->
-		<move file="${scenarioExerciseFolder}/MyKaraSokoban${scenarioNumber}.java" tofile="${scenarioExerciseFolder}/MyKaraSokoban.java" />
-		<replace file="${scenarioExerciseFolder}/MyKaraSokoban.java" token="MyKaraSokoban${scenarioNumber}" value="MyKaraSokoban"/>
-		<replace file="${scenarioExerciseFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
+		<!-- Rename MyKara to MyKaraSokoban in KaraWorld -->
+		<replace file="${scenarioExerciseSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
 		
 		<!-- Set the world setup file to null in KaraWorld -->
-		<replaceregexp file="${scenarioExerciseFolder}/KaraWorld.java"
+		<replaceregexp file="${scenarioExerciseSubFolder}/KaraWorld.java"
 		               match="WORLD_SETUP_FILE\s?=\s?(.*);"
 		               replace="WORLD_SETUP_FILE = null;"
 		               byline="true"
 		/>
-		
-		
+
+
 		<!-- Copy to scenarios SOLUTION folder -->
-		<mkdir dir="${scenarioSolutionFolder}" />
-		<copy todir="${scenarioSolutionFolder}">
-			<fileset dir="src" excludes="MyKara.java, project.greenfoot, README.TXT" />
-			<fileset dir="src-sokoban" excludes="MyKaraSokoban.java"/>
-			<fileset file="${myKaraSolutionFile}" />
-			<fileset file="${levelFile}" />
-			<fileset file="${levelBoxxleFile}" />
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/sokoban" includes="*" excludes="MyKaraSokoban.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" 
+				excludes="**/MyKaraSokoban.java" />
+			<fileset file="greenfoot/sokoban/*.*" />
 		</copy>
-		<copy todir="${scenarioSolutionFolder}/images">
+		<copy todir="${scenarioSolutionSubFolder}/images">
 			<fileset dir="images" />
 		</copy>
-		<!-- Copy skin
-		<copy todir="${scenarioSolutionFolder}/images" overwrite="true" >
+		<!-- Copy skin -->
+		<copy todir="${scenarioSolutionSubFolder}/images" overwrite="true" >
 			<fileset dir="skin" />
 		</copy>
-		 -->
-		<!-- Rename the MyKaraSolution class -->
-		<move file="${scenarioSolutionFolder}/MyKaraSokoban${scenarioNumber}Solution.java" tofile="${scenarioSolutionFolder}/MyKaraSokoban.java" />
-		<replace file="${scenarioSolutionFolder}/MyKaraSokoban.java" token="MyKaraSokoban${scenarioNumber}Solution" value="MyKaraSokoban"/>
-		<replace file="${scenarioSolutionFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
 		
+		<!-- Rename MyKara to MyKaraSokoban in KaraWorld -->
+		<replace file="${scenarioSolutionSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
+		<!-- Rename the MyKaraSokobanSolution class to MyKaraSokoban -->
+		<move file="${scenarioSolutionSubFolder}/MyKaraSokobanSolution.java" tofile="${scenarioSolutionSubFolder}/MyKaraSokoban.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKaraSokoban.java" token="MyKaraSokobanSolution" value="MyKaraSokoban"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
 		<!-- Set the world setup file to null in KaraWorld -->
-		<replaceregexp file="${scenarioSolutionFolder}/KaraWorld.java"
+		<replaceregexp file="${scenarioSolutionSubFolder}/KaraWorld.java"
 		               match="WORLD_SETUP_FILE\s?=\s?(.*);"
 		               replace="WORLD_SETUP_FILE = null;"
 		               byline="true"
@@ -367,9 +373,9 @@
 	<target name="doZipChapter">
 		<zip destfile="${zipFolder}/${chapterName}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
 	</target>
-	
+
 	<target name="cleanTarget">
 		<delete dir="${targetScenariosFolder}" />
 	</target>
-		
+
 </project>
