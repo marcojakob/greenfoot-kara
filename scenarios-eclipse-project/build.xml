@@ -2,7 +2,7 @@
 <project default="main">
 	<!-- Builds Eclipse Projects for each chapter and zips them -->
 
-	<property name="version">1.3.4</property>
+	<property name="version">2.0.0-beta.1</property>
 
 	<property name="targetScenariosFolder">targetScenarios</property>
 	<property name="zipFolder">targetZips</property>
@@ -182,6 +182,19 @@
 		<antcall target="doZipChapter">
 			<param name="chapterName" value="scenarios-chapter-5-solutions" />
 		</antcall>
+		
+		<!-- Create the "All" zips -->
+		<zip destfile="${zipFolder}/scenarios-all-v${version}.zip" >
+			<fileset dir="${targetScenariosFolder}">
+				<exclude name="*solutions/**" />
+			</fileset>
+		</zip>
+
+		<zip destfile="${zipFolder}/scenarios-all-solutions-v${version}.zip" >
+			<fileset dir="${targetScenariosFolder}">
+				<include name="*solutions/**" />
+			</fileset>
+		</zip>
 	</target>
 
 
@@ -371,7 +384,7 @@
 	</target>
 
 	<target name="doZipChapter">
-		<zip destfile="${zipFolder}/${chapterName}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
+		<zip destfile="${zipFolder}/${chapterName}-v${version}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
 	</target>
 
 	<target name="cleanTarget">
