@@ -1,26 +1,17 @@
-----------------------------------------------------------------
--- GreenfootKara Copyright (ENGLISH) --
-----------------------------------------------------------------
-The copyright of Kara is held by Raimond Raicert et. al. (see http://www.swisseduc.ch/about/copyright/).
+Copyright (c) 2012 Marco Jakob
 
-The copyright of Greenfoot is held by Michael Kölling and Paul Henriksen. Greenfoot is available under the 
-GNU General Public License version 2 with the Classpath Exception (see http://www.greenfoot.org/about).
+GreenfootKara's documents are licensed under the Creative Commons 
+Attribution 3.0 Unported License. To view a copy of this license, 
+visit http://creativecommons.org/licenses/by/3.0/
 
-The copyright of GreenfootKara is held by Marco Jakob (majakob@gmx.ch). The GNU Public License 
-(http://www.gnu.org/copyleft/gpl.html) applies to all resources of GreenfootKara: The source code and other
-material of GreenfootKara may be modified, but the changes must be published under GPL again and the original
-authors must be mentioned.
+GreenfootKara's source code is licensed under the MIT License. To
+view a copy of this license, visit http://opensource.org/licenses/mit
 
 
-----------------------------------------------------------------
--- GreenfootKara Copyright (GERMAN) --
-----------------------------------------------------------------
-Die Urheberrechte an Kara liegen bei Raimond Raichert et. al. (siehe http://www.swisseduc.ch/about/copyright/).
+===
 
-Die Urheberrechte an Greenfoot liegen bei Michael Kölling und Paul Henriksen. Greenfoot wurde unter der 
-GNU Generel Public Lizenz version 2 mit Classpath Exception veröffentlicht (siehe http://www.greenfoot.org/about).
+External libraries and resources used by GreenfootKara:
 
-Die Urheberrechte an GreenfootKara liegen bei Marco Jakob (majakob@gmx.ch). Fuer GreenfootKara gelten die 
-Bestimmungen der GNU Public License (http://www.gnu.org/copyleft/gpl.html): Der Quellcode und das Material darf 
-veraendert werden, aber die Aenderungen müssen auch wieder unter der GPL publiziert werden, und die urspruengliche 
-Autorenschaft muss genannt werden.
+- Kara
+	The copyright of Kara is held by Raimond Raichert et. al. 
+	(see http://www.swisseduc.ch/about/copyright)
