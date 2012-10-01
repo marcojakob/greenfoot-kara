@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  * This class creates a world for Kara. It contains settings for height and
  * width of the world and initializes the Actors.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class KaraWorld extends World {
 	

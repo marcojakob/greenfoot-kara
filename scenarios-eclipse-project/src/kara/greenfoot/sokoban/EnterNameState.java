@@ -6,7 +6,7 @@ import java.awt.Color;
 /**
  * The enter name screen state.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class EnterNameState extends ScreenState {
 	private Button startGameButton;

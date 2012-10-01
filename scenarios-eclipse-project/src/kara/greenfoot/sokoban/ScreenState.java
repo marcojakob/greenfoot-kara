@@ -5,7 +5,7 @@ package kara.greenfoot.sokoban;
  * <p>
  * The class structure is made according to the state design pattern.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public abstract class ScreenState {
 	protected GameScreen gameScreen;

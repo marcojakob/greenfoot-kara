@@ -27,7 +27,7 @@ import java.util.List;
  * Note: Every User will only be stored once for every level, e.g. it is not
  * possible for one user to be on first and second place.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class ServerHighscore extends HighscoreManager {
 	private UserInfo myUserInfo;

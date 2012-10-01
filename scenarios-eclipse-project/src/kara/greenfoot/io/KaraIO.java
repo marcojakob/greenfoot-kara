@@ -10,7 +10,7 @@ import kara.greenfoot.Kara;
  * <i>KaraIO erweitert die Funktionalitaet von Kara mit Methoden fuer
  * Input/Output.</i>
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class KaraIO extends Kara {
 

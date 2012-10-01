@@ -6,7 +6,7 @@ import java.awt.Color;
 /**
  * The start screen state.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class StartState extends ScreenState {
 	private Button startGameButton;

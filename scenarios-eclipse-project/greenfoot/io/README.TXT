@@ -26,5 +26,5 @@
 
 
 ------------------------------------------------------------------------
-Author:  Marco Jakob (majakob@gmx.ch)
-Version: 1.3.4
+Author: Marco Jakob (http://edu.makery.ch)
+Version: GreenfootKara 2.0.0

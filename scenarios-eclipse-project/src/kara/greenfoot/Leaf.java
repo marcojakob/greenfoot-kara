@@ -5,7 +5,7 @@ import greenfoot.*;
 /**
  * A leaf can be put and removed by Kara.
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class Leaf extends Actor {
 	

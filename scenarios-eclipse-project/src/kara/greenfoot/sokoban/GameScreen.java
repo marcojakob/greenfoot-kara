@@ -26,7 +26,7 @@ import kara.greenfoot.Tree;
  * <li>the highscore
  * <ul>
  * 
- * @author Marco Jakob (majakob@gmx.ch)
+ * @author Marco Jakob (http://edu.makery.ch)
  */
 public class GameScreen extends KaraWorld {
 	
