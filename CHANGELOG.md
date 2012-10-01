@@ -1,6 +1,6 @@
 # Changelog #
 
-## GreenfootKara 2.0, not released ##
+## GreenfootKara 2.0, 2012-10-01 ##
 
 * Major changes to be able to work with an eclipse project to generate
 	Greenfoot scenarios.
