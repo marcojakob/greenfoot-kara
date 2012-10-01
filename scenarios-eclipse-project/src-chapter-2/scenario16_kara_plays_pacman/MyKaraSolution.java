@@ -19,6 +19,7 @@ public class MyKaraSolution extends Kara {
 			removeLeaf();
 			findNextLeaf();
 		} else {
+			removeLeaf();
 			stop();
 		}
 	}
