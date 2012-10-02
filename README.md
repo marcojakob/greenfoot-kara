@@ -1,5 +1,7 @@
 # GreenfootKara #
 
+![GreenfootKara](http://www.swisseduc.ch/informatik/karatojava/greenfootkara/icons/greenfootkara-logo-large.png)
+
 GreenfootKara is a combination of the mini-world 
 [Kara](http://www.swisseduc.ch/compscience/karatojava/index.html) and [Greenfoot](www.greenfoot.org) 
 to teach introductory programming in Java.
@@ -22,7 +24,7 @@ Java and leaves all options open. Thus, advanced students can also realize very 
 
 ## Teaching Resources ##
 To download the handouts and GreenfootKara scenarios go to the following websites:
-* [GreenfootKara Downloas in English](http://www.swisseduc.ch/informatik/karatojava/greenfootkara/greenfootkara-english.html)
+* [GreenfootKara Downloads in English](http://www.swisseduc.ch/informatik/karatojava/greenfootkara/greenfootkara-english.html)
 * [GreenfootKara Downloads in German](http://www.swisseduc.ch/informatik/karatojava/greenfootkara/index.html)
 
 To stay informed about new releases of GreenfootKara take a look at my blog:
