@@ -20,9 +20,9 @@
 ## GreenfootKara 1.3, 2012-07-04 ##
 
 * English and German:
-** Most code comments that usually only teachers read are in English
-** Javadoc for Kara and MyKara are in English and German
-** Handouts in English and German
+ * Most code comments that usually only teachers read are in English
+ * Javadoc for Kara and MyKara are in English and German
+ * Handouts in English and German
 	
 * Changed the name of 'Wiese' to 'KaraWorld'	
 
@@ -38,16 +38,16 @@
   the program and restart greenfoot.
 
 * Improvements in Kara Sokoban:
-** Possibility to use Highscore when Scenario is uploaded to Greenfoot.org (via UserInfo).
-** Mechanism to detect whether we can use a file highscore or the server highscore via UserInfo.
-** Simplified adding of a new Highscore for students.
-** Fixed some minor bugs.
-** Some minor refactorings.
+ * Possibility to use Highscore when Scenario is uploaded to Greenfoot.org (via UserInfo).
+ * Mechanism to detect whether we can use a file highscore or the server highscore via UserInfo.
+ * Simplified adding of a new Highscore for students.
+ * Fixed some minor bugs.
+ * Some minor refactorings.
 
 * Finally implemented a solution for the Scenario 'Kara 25 Push Mushroom trough Tunnel'
 
 * Some refactorings:
-** Deleted the privat Kara method 'canMove()'. The testing if Kara can move is now done
+ * Deleted the privat Kara method 'canMove()'. The testing if Kara can move is now done
 	  inside the 'move()' method.
 	
 * Updated the Sheet about Teacher Information.
