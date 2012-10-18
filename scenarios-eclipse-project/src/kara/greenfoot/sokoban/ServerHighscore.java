@@ -221,21 +221,6 @@ public class ServerHighscore extends HighscoreManager {
 			}
 		}
 		
-		// fix scores of danpost for the last three levels that are new
-		// TODO: Remove
-		if (userInfo.getScore() == 62) {
-			result.put(106, 0);
-			result.put(107, 0);
-			result.put(108, 0);
-			
-			// if it's the current user --> save in the new format for later
-			if (userInfo.getUserName().equals(myUserInfo.getUserName())) {
-				for (int i = 106; i < 251; i++) {
-					setToMyInfo(i, 0);
-				}
-			}
-		}
-		
 		return result;
 	}
 	
