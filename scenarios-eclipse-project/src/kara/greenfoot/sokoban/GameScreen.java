@@ -4,6 +4,7 @@ import greenfoot.*;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -93,14 +94,23 @@ public class GameScreen extends KaraWorld {
 		Greenfoot.setSpeed(100);
 		
 		// Read all the levels from the level file
-		this.allLevels = Level.parseFromFile(MyKaraSokoban.LEVEL_FILE, MyKaraSokoban.class);
-		
-		if (allLevels == null || allLevels.length == 0) {
-			String message = "<html>" + "Could not load Levels from file: <p><i>" 
-					+ "Konnte Levels nicht laden von der Datei: "
-					+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE
-					+ "<p><p>(A Level-file must contain at least one String \"Level:\")</html>";
+		try {
+			this.allLevels = Level.parseFromFile(MyKaraSokoban.LEVEL_FILE, MyKaraSokoban.class);
+			
+			if (allLevels == null || allLevels.length == 0) {
+				String message = "<html>" + "Could not load Levels from file: <p><i>" 
+						+ "Konnte Levels nicht laden von der Datei: "
+						+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE
+						+ "<p><p>(A Level-file must contain at least one String \"Level:\")</html>";
 
+				JOptionPane.showMessageDialog(null, message, "Warning",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		} catch (IOException e) {
+			String message = "<html>" + "Could not find level file: <p><i>" 
+					+ "Konnte die Level Datei nicht finden: "
+					+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE + "</html>";
+			
 			JOptionPane.showMessageDialog(null, message, "Warning",
 					JOptionPane.WARNING_MESSAGE);
 		}
