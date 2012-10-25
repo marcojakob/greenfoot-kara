@@ -2,7 +2,7 @@
 <project default="main">
 	<!-- Builds Eclipse Projects for each chapter and zips them -->
 
-	<property name="version">2.0.1</property>
+	<property name="version">2.0.2</property>
 
 	<property name="targetScenariosFolder">targetScenarios</property>
 	<property name="zipFolder">targetZips</property>
@@ -184,13 +184,13 @@
 		</antcall>
 		
 		<!-- Create the "All" zips -->
-		<zip destfile="${zipFolder}/scenarios-all-v${version}.zip" >
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-v${version}.zip" >
 			<fileset dir="${targetScenariosFolder}">
 				<exclude name="*solutions/**" />
 			</fileset>
 		</zip>
 
-		<zip destfile="${zipFolder}/scenarios-all-solutions-v${version}.zip" >
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-solutions-v${version}.zip" >
 			<fileset dir="${targetScenariosFolder}">
 				<include name="*solutions/**" />
 			</fileset>

@@ -1,12 +1,13 @@
 # Changelog #
 
-## GreenfootKara 2.0.1 ##
+## GreenfootKara 2.0.2, 2012-10-25 ##
+* Simpler solutions to scenarios 22 and 23.
 
+## GreenfootKara 2.0.1, 2012-10-22 ##
 * Improved error handling if world setup file could not be loaded.
 
 
 ## GreenfootKara 2.0, 2012-10-01 ##
-
 * Major changes to be able to work with an eclipse project to generate
 	Greenfoot scenarios.
 * Created a new class for every scenario called WorldSetup that reades the world setup
@@ -23,7 +24,6 @@
 
 
 ## GreenfootKara 1.3, 2012-07-04 ##
-
 * English and German:
  * Most code comments that usually only teachers read are in English
  * Javadoc for Kara and MyKara are in English and German
@@ -59,6 +59,5 @@
 	
 
 ## GreenfootKara 1.2, 2012-01-04 ##
-
 * Reordering of scenarios. Now they are ordered by chapter instead of day.
 * Some minor spelling corrections
