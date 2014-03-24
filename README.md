@@ -1,6 +1,6 @@
 # GreenfootKara
 
-![GreenfootKara](https://raw.githubusercontent.com/marcojakob/greenfoot-kara/master/images/greenfootkara-logo-large.png)
+![GreenfootKara](https://raw.githubusercontent.com/marcojakob/greenfoot-kara/master/images/greenfoot-kara-logo-large.png)
 
 GreenfootKara is a combination of the mini-world 
 [Kara](http://www.swisseduc.ch/compscience/karatojava/index.html) and [Greenfoot](http://www.greenfoot.org) 
