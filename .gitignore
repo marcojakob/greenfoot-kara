@@ -1,2 +1,9 @@
-/downloads
-/swisseduc-website
+#################
+## Eclipse
+#################
+/bin
+/.metadata
+/target*
+
+# Locally stored "Eclipse launch configurations"
+/*.launch

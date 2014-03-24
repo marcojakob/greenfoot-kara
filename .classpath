@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src-chapter-1"/>
+	<classpathentry kind="src" path="src-chapter-2"/>
+	<classpathentry kind="src" path="src-chapter-3"/>
+	<classpathentry kind="src" path="src-chapter-4"/>
+	<classpathentry kind="src" path="src-chapter-5"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="lib/greenfoot-2.2.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

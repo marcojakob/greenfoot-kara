@@ -1,0 +1,394 @@
+<?xml version="1.0" ?>
+<project default="main">
+	<!-- Builds Eclipse Projects for each chapter and zips them -->
+
+	<property name="version">2.1.0</property>
+
+	<property name="targetScenariosFolder">targetScenarios</property>
+	<property name="zipFolder">targetZips</property>
+	<property name="jarName">GreenKara-${version}.jar</property>
+
+	<target name="main" depends="prepareScenarios, buildScenarios" />
+
+	<target name="prepareScenarios" >
+		<delete dir="${targetScenariosFolder}" />
+		<mkdir dir="${targetScenariosFolder}" />
+		<delete dir="${zipFolder}" />
+		<mkdir dir="${zipFolder}" />
+	</target>
+
+	<target name="buildScenarios" description="Distribute to individual scenarios">
+		<!-- Chapter 1 -->
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-1" />
+			<param name="scenarioNumber" value="101" />
+			<param name="scenarioTitle" value="First Steps" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-1" />
+			<param name="scenarioNumber" value="106" />
+			<param name="scenarioTitle" value="Putting Leaf" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-1" />
+			<param name="scenarioNumber" value="107" />
+			<param name="scenarioTitle" value="Around Tree" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-1" />
+			<param name="scenarioNumber" value="108" />
+			<param name="scenarioTitle" value="Around Tree with Method" />
+		</antcall>
+		<!-- Create the zips -->
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-1" />
+		</antcall>
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-1-solutions" />
+		</antcall>
+
+		<!-- Chapter 2 -->
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="206" />
+			<param name="scenarioTitle" value="Around Tree II" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="207" />
+			<param name="scenarioTitle" value="Nested Conditions" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="208" />
+			<param name="scenarioTitle" value="Afraid Of Tunnel" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="209" />
+			<param name="scenarioTitle" value="Leaf At Tree" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="210" />
+			<param name="scenarioTitle" value="Put Leaf Track" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="211" />
+			<param name="scenarioTitle" value="Round Trip" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="212" />
+			<param name="scenarioTitle" value="Kara Plays Pacman" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="214" />
+			<param name="scenarioTitle" value="Around Tree III" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="215" />
+			<param name="scenarioTitle" value="Climbing Up" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-2" />
+			<param name="scenarioNumber" value="216" />
+			<param name="scenarioTitle" value="Kara As Guard" />
+		</antcall>
+		<!-- Create the zips -->
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-2" />
+		</antcall>
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-2-solutions" />
+		</antcall>
+
+		<!-- Chapter 3 -->
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-3" />
+			<param name="scenarioNumber" value="301" />
+			<param name="scenarioTitle" value="Counting Leafs" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-3" />
+			<param name="scenarioNumber" value="302" />
+			<param name="scenarioTitle" value="Kara In A Box I" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-3" />
+			<param name="scenarioNumber" value="303" />
+			<param name="scenarioTitle" value="Kara In A Box II" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-3" />
+			<param name="scenarioNumber" value="304" />
+			<param name="scenarioTitle" value="The Longest Tree Line" />
+		</antcall>
+		<antcall target="doBuildScenario">
+			<param name="chapter" value="chapter-3" />
+			<param name="scenarioNumber" value="305" />
+			<param name="scenarioTitle" value="Push Mushroom Trough Tunnel" />
+		</antcall>
+		<!-- Create the zips -->
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-3" />
+		</antcall>
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-3-solutions" />
+		</antcall>
+
+		<!-- Chapter 4 -->
+		<antcall target="doBuildSokobanScenario">
+			<param name="chapter" value="chapter-4" />
+			<param name="scenarioNumber" value="401" />
+			<param name="scenarioTitle" value="Kara Sokoban" />
+		</antcall>
+		<!-- Create the zips -->
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-4" />
+		</antcall>
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-4-solutions" />
+		</antcall>
+
+		<!-- Chapter 5 -->
+		<antcall target="doBuildIOScenario">
+			<param name="chapter" value="chapter-5" />
+			<param name="scenarioNumber" value="501" />
+			<param name="scenarioTitle" value="Baking A Cake" />
+		</antcall>
+		<antcall target="doBuildIOScenario">
+			<param name="chapter" value="chapter-5" />
+			<param name="scenarioNumber" value="502" />
+			<param name="scenarioTitle" value="Candles On Cake" />
+		</antcall>
+		<antcall target="doBuildIOScenario">
+			<param name="chapter" value="chapter-5" />
+			<param name="scenarioNumber" value="503" />
+			<param name="scenarioTitle" value="Candles For Age" />
+		</antcall>
+		<antcall target="doBuildIOScenario">
+			<param name="chapter" value="chapter-5" />
+			<param name="scenarioNumber" value="504" />
+			<param name="scenarioTitle" value="Layered Cake" />
+		</antcall>
+		<!-- Create the zips -->
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-5" />
+		</antcall>
+		<antcall target="doZipChapter">
+			<param name="chapterName" value="scenarios-chapter-5-solutions" />
+		</antcall>
+		
+		<!-- Create the "All" zips -->
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-v${version}.zip" >
+			<fileset dir="${targetScenariosFolder}">
+				<exclude name="*solutions/**" />
+			</fileset>
+		</zip>
+
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-solutions-v${version}.zip" >
+			<fileset dir="${targetScenariosFolder}">
+				<include name="*solutions/**" />
+			</fileset>
+		</zip>
+	</target>
+
+
+	<target name="doBuildScenario">
+		<echo>Building ${chapter} Scenario ${scenarioNumber} ${scenarioTitle}</echo>
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
+
+		<!-- Copy to scenarios EXERCISE folder -->
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraSolution.java" />
+			<fileset file="greenfoot/*.*" />
+		</copy>
+		<copy todir="${scenarioExerciseSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- Copy to scenarios SOLUTION folder -->
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKara.java" />
+			<fileset file="greenfoot/*.*" />
+		</copy>
+		<copy todir="${scenarioSolutionSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Rename the MyKaraSolution class -->
+		<move file="${scenarioSolutionSubFolder}/MyKaraSolution.java" tofile="${scenarioSolutionSubFolder}/MyKara.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKara.java" token="MyKaraSolution" value="MyKara"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+	</target>
+
+
+
+	<target name="doBuildIOScenario">
+		<echo>Building ${chapter} IO Scenario ${scenarioNumber} ${scenarioTitle}</echo>
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
+
+		<!-- Copy to scenarios EXERCISE folder -->
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/io" includes="*" excludes="MyKaraIO.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraIOSolution.java" />
+			<fileset file="greenfoot/io/*.*" />
+		</copy>
+		<copy todir="${scenarioExerciseSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Rename MyKara to MyKaraIO in KaraWorld -->
+		<replace file="${scenarioExerciseSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- Copy to scenarios SOLUTION folder -->
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/io" includes="*" excludes="MyKaraIO.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" excludes="**/MyKaraIO.java" />
+			<fileset file="greenfoot/io/*.*" />
+		</copy>
+		<copy todir="${scenarioSolutionSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Rename MyKara to MyKaraIO in KaraWorld -->
+		<replace file="${scenarioSolutionSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraIO"/>
+		<!-- Rename the MyKaraIOSolution class to MyKaraIO -->
+		<move file="${scenarioSolutionSubFolder}/MyKaraIOSolution.java" tofile="${scenarioSolutionSubFolder}/MyKaraIO.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKaraIO.java" token="MyKaraIOSolution" value="MyKaraIO"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+	</target>
+
+
+
+	<target name="doBuildSokobanScenario">
+		<echo>Building ${chapter} Sokoban Scenario ${scenarioNumber} ${scenarioTitle}</echo>
+		<property name="chapterExercisesFolder" value="${targetScenariosFolder}/scenarios-${chapter}"/>
+		<property name="chapterSolutionsFolder" value="${targetScenariosFolder}/scenarios-${chapter}-solutions"/>
+		<property name="scenarioExerciseSubFolder" value="${chapterExercisesFolder}/Kara ${scenarioNumber} ${scenarioTitle}"/>
+		<property name="scenarioSolutionSubFolder" value="${chapterSolutionsFolder}/Kara ${scenarioNumber} ${scenarioTitle} (SOLUTION)"/>
+
+		<!-- Copy to scenarios EXERCISE folder -->
+		<mkdir dir="${scenarioExerciseSubFolder}" />
+		<copy todir="${scenarioExerciseSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/sokoban" includes="*" excludes="MyKaraSokoban.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" 
+				excludes="**/MyKaraSokobanSolution.java, **/LevelsBoxxle1.txt" />
+			<fileset file="greenfoot/sokoban/*.*" />
+		</copy>
+		<copy todir="${scenarioExerciseSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Rename MyKara to MyKaraSokoban in KaraWorld -->
+		<replace file="${scenarioExerciseSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioExerciseSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+		
+		<!-- Set the world setup file to null in KaraWorld -->
+		<replaceregexp file="${scenarioExerciseSubFolder}/KaraWorld.java"
+		               match="WORLD_SETUP_FILE\s?=\s?(.*);"
+		               replace="WORLD_SETUP_FILE = null;"
+		               byline="true"
+		/>
+
+
+		<!-- Copy to scenarios SOLUTION folder -->
+		<mkdir dir="${scenarioSolutionSubFolder}" />
+		<copy todir="${scenarioSolutionSubFolder}" flatten="true" includeEmptyDirs="false">
+			<fileset dir="src/kara/greenfoot" includes="*" excludes="MyKara.java, project.greenfoot, README.TXT" />
+			<fileset dir="src/kara/greenfoot/sokoban" includes="*" excludes="MyKaraSokoban.java" />
+			<fileset dir="src-${chapter}" includes="scenario${scenarioNumber}*/*" 
+				excludes="**/MyKaraSokoban.java" />
+			<fileset file="greenfoot/sokoban/*.*" />
+		</copy>
+		<copy todir="${scenarioSolutionSubFolder}/images">
+			<fileset dir="images" />
+		</copy>
+		<!-- Copy skin -->
+		<copy todir="${scenarioSolutionSubFolder}/images" overwrite="true" >
+			<fileset dir="skin" />
+		</copy>
+		
+		<!-- Rename MyKara to MyKaraSokoban in KaraWorld -->
+		<replace file="${scenarioSolutionSubFolder}/KaraWorld.java" token="MyKara" value="MyKaraSokoban"/>
+		<!-- Rename the MyKaraSokobanSolution class to MyKaraSokoban -->
+		<move file="${scenarioSolutionSubFolder}/MyKaraSokobanSolution.java" tofile="${scenarioSolutionSubFolder}/MyKaraSokoban.java" />
+		<replace file="${scenarioSolutionSubFolder}/MyKaraSokoban.java" token="MyKaraSokobanSolution" value="MyKaraSokoban"/>
+		<!-- Remove the package declarations and import statements -->
+		<replaceregexp byline="true">
+			<regexp pattern="package.+;|import\s+kara.+;"/>
+			<substitution expression=""/>
+			<fileset dir="${scenarioSolutionSubFolder}">
+				<include name="*.java"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- Set the world setup file to null in KaraWorld -->
+		<replaceregexp file="${scenarioSolutionSubFolder}/KaraWorld.java"
+		               match="WORLD_SETUP_FILE\s?=\s?(.*);"
+		               replace="WORLD_SETUP_FILE = null;"
+		               byline="true"
+		/>
+	</target>
+
+	<target name="doZipChapter">
+		<zip destfile="${zipFolder}/${chapterName}-v${version}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
+	</target>
+
+	<target name="cleanTarget">
+		<delete dir="${targetScenariosFolder}" />
+	</target>
+
+</project>
