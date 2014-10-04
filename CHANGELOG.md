@@ -1,5 +1,12 @@
 # Changelog
 
+## GreenfootKara 2.1.1, 2014-10-04
+
+* Ensure all popup dialogs (messages, file chooser, etc.) open in the Event Dispatcher Thread so it doesn't freeze the UI (see Issue #1).
+* Update to Greenfoot 2.4.0.
+* Specify last instantiated world in `greenfot.project` for scenarios using `GameScreen` class as world.
+
+
 ## GreenfootKara 2.1.0, 2013-03-24
 
 * The master for all tutorials/worksheets is now in HTML instead of Word. The HTML is on the code.makery.ch website. The converted worksheets can still be downloaded as Word files from that website. 
