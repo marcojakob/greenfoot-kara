@@ -27,4 +27,4 @@
 
 ------------------------------------------------------------------------
 Author: Marco Jakob (http://code.makery.ch)
-Version: GreenfootKara 2.1.0
+Version: GreenfootKara 2.1.1
