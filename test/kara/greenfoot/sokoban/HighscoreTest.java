@@ -135,7 +135,7 @@ public class HighscoreTest {
 		Highscore.Entry e1 = new Highscore.Entry("aaa", 50);
 		Highscore.Entry e2 = new Highscore.Entry("bbb", 60);
 		Highscore.Entry e3 = new Highscore.Entry("ccc", 70);
-		Highscore.Entry e4 = new Highscore.Entry("ddd", 60);
+		Highscore.Entry e4 = new Highscore.Entry("ddd", 55);
 		
 		// when
 		highscore.addHighscoreEntry(e1);
@@ -145,8 +145,8 @@ public class HighscoreTest {
 		
 		// then
 		assertTrue(entryEquals(highscore.getFirstEntry(), e1));
-		assertTrue(entryEquals(highscore.getSecondEntry(), e2));
-		assertTrue(entryEquals(highscore.getThirdEntry(), e4));
+		assertTrue(entryEquals(highscore.getSecondEntry(), e4));
+		assertTrue(entryEquals(highscore.getThirdEntry(), e2));
 	}
 	
 	@Test
