@@ -7,8 +7,8 @@
 	<classpathentry kind="src" path="src-chapter-4"/>
 	<classpathentry kind="src" path="src-chapter-5"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="lib/greenfoot-2.2.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/greenfoot-api-2.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
