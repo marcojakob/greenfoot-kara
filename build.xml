@@ -2,11 +2,8 @@
 <project default="main">
 	<!-- Builds Eclipse Projects for each chapter and zips them -->
 
-	<property name="version">2.1.1</property>
-
 	<property name="targetScenariosFolder">targetScenarios</property>
 	<property name="zipFolder">targetZips</property>
-	<property name="jarName">GreenKara-${version}.jar</property>
 
 	<target name="main" depends="prepareScenarios, buildScenarios" />
 
@@ -184,13 +181,13 @@
 		</antcall>
 		
 		<!-- Create the "All" zips -->
-		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-v${version}.zip" >
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios.zip" >
 			<fileset dir="${targetScenariosFolder}">
 				<exclude name="*solutions/**" />
 			</fileset>
 		</zip>
 
-		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-solutions-v${version}.zip" >
+		<zip destfile="${zipFolder}/greenfootkara-all-scenarios-solutions.zip" >
 			<fileset dir="${targetScenariosFolder}">
 				<include name="*solutions/**" />
 			</fileset>
@@ -384,7 +381,7 @@
 	</target>
 
 	<target name="doZipChapter">
-		<zip destfile="${zipFolder}/${chapterName}-v${version}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
+		<zip destfile="${zipFolder}/${chapterName}.zip" basedir="${targetScenariosFolder}/${chapterName}" />
 	</target>
 
 	<target name="cleanTarget">
