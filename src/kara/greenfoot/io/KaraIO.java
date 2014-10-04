@@ -3,6 +3,7 @@ package kara.greenfoot.io;
 import javax.swing.JOptionPane;
 
 import kara.greenfoot.Kara;
+import kara.greenfoot.KaraWorld;
 
 /**
  * KaraIO extends the functionality of Kara by adding input/output methods.
@@ -19,7 +20,7 @@ public class KaraIO extends Kara {
 	 * <i>Zeigt die angegebene Nachricht dem Benutzer an</i>
 	 */
 	public void displayMessage(String message) {
-		JOptionPane.showMessageDialog(null, message, "Info",
+		KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Info",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -37,7 +38,7 @@ public class KaraIO extends Kara {
 
 		// Ask until the user entered a correct value
 		while (!correctValue) {
-			String inputValue = JOptionPane.showInputDialog(message);
+			String inputValue = KaraWorld.DialogUtils.showInputDialogEdt(message);
 
 			if (inputValue != null) {
 				try {
@@ -74,7 +75,7 @@ public class KaraIO extends Kara {
 
 		// Ask until the user entered a correct value
 		while (!correctValue) {
-			String inputValue = JOptionPane.showInputDialog(message);
+			String inputValue = KaraWorld.DialogUtils.showInputDialogEdt(message);
 
 			if (inputValue != null) {
 				try {

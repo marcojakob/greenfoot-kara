@@ -825,6 +825,8 @@ public class WorldSetup {
 		 * Opens a file chooser dialog to ask the user for a filename. If
 		 * successful, the given content is written to the chosen text file.
 		 * 
+		 * Note: Make sure to call
+		 * 
 		 * @param content
 		 *            Content to write to the file
 		 * @throws IOException
@@ -850,16 +852,15 @@ public class WorldSetup {
 				}
 			});
 
-			int retrival = fileChooser.showSaveDialog(null);
+			// Show dialog (using the Event Dispatch Thread)
+			int retrival = KaraWorld.DialogUtils.showSaveDialogEdt(fileChooser, null);
 
 			if (retrival == JFileChooser.APPROVE_OPTION) {
 				File chosenFile = fileChooser.getSelectedFile();
 
 				if (chosenFile.exists()) {
-					int option = JOptionPane
-							.showConfirmDialog(
-									null,
-									"The file "
+					int option = KaraWorld.DialogUtils.showConfirmDialogEdt(
+									null, "The file "
 											+ chosenFile
 											+ " exists already. Do you want to overwrite the existing file?",
 									"File Exists", JOptionPane.YES_NO_OPTION);

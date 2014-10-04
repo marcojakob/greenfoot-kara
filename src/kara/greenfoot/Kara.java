@@ -1,7 +1,10 @@
 package kara.greenfoot;
 
-import greenfoot.*;
+import greenfoot.Actor;
+import greenfoot.Greenfoot;
+
 import java.util.List;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -178,7 +181,7 @@ public class Kara extends Actor {
 				+ "</i></html>";
 
 		Object[] options = { "OK", "Exit Program" };
-		int choice = JOptionPane.showOptionDialog(null, message, "Warning",
+		int choice = KaraWorld.DialogUtils.showOptionDialogEdt(null, message, "Warning",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
 				options, options[0]);
 

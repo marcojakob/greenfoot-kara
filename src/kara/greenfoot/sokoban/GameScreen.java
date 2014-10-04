@@ -1,6 +1,7 @@
 package kara.greenfoot.sokoban;
 
-import greenfoot.*;
+import greenfoot.Greenfoot;
+import greenfoot.GreenfootImage;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -103,7 +104,7 @@ public class GameScreen extends KaraWorld {
 						+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE
 						+ "<p><p>(A Level-file must contain at least one String \"Level:\")</html>";
 
-				JOptionPane.showMessageDialog(null, message, "Warning",
+				KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Warning",
 						JOptionPane.WARNING_MESSAGE);
 			}
 		} catch (IOException e) {
@@ -111,7 +112,7 @@ public class GameScreen extends KaraWorld {
 					+ "Konnte die Level Datei nicht finden: "
 					+ "</i><p><p>" + MyKaraSokoban.LEVEL_FILE + "</html>";
 			
-			JOptionPane.showMessageDialog(null, message, "Warning",
+			KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Warning",
 					JOptionPane.WARNING_MESSAGE);
 		}
 		

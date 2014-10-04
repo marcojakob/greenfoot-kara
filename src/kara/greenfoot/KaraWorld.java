@@ -1,12 +1,21 @@
 package kara.greenfoot;
 
-import greenfoot.*;
+import greenfoot.Greenfoot;
+import greenfoot.GreenfootImage;
+import greenfoot.World;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.Icon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 
@@ -122,7 +131,7 @@ public class KaraWorld extends World {
 							+ "<p><p>(A world-file must start with \"" + WORLD_SETUP_TITLE_KEY 
 							+ "\")</html>";
 					
-					JOptionPane.showMessageDialog(null, message, "Warning",
+					KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Warning",
 							JOptionPane.WARNING_MESSAGE);
 				}
 			}
@@ -131,7 +140,7 @@ public class KaraWorld extends World {
 					+ "Konnte die world setup Datei nicht finden: "
 					+ "</i><p><p>" + worldFile + "</html>";
 			
-			JOptionPane.showMessageDialog(null, message, "Warning",
+			KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Warning",
 					JOptionPane.WARNING_MESSAGE);
 		}
 			
@@ -142,7 +151,7 @@ public class KaraWorld extends World {
 				result = worldSetups[0];
 			} else if (worldSetups.length > 1) {
 				// User must choose from a list of world setups
-				result = (WorldSetup) JOptionPane.showInputDialog(null, 
+				result = (WorldSetup) KaraWorld.DialogUtils.showInputDialogEdt(null, 
 						"<html>Please Choose a World: <p><i>Bitte waehle eine Welt:</i>", 
 						"Choose World",
 						JOptionPane.QUESTION_MESSAGE, null,
@@ -259,16 +268,11 @@ public class KaraWorld extends World {
 	 * Saves the world setup to a file that the user can choose.
 	 */
 	public void saveWorldSetupToFile() {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WorldSetup.FileUtils.saveToFileWithDialog(toASCIIText());
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-            }
-        });
+        try {
+            WorldSetup.FileUtils.saveToFileWithDialog(toASCIIText());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 	}
 	
 	/**
@@ -309,4 +313,215 @@ public class KaraWorld extends World {
 			return defaultImage;
 		}
 	}
+	
+	/**
+	 * Utility class for managing dialogs to ensure they are opened in the 
+	 * Event Dispatch Thread.
+	 */
+	public static class DialogUtils {
+		
+		/**
+		 * Calls {@link JOptionPane#showMessageDialog(java.awt.Component, Object, String, int)} and ensures 
+		 * it is called on the Event Dispatch Thread.
+		 */
+		public static void showMessageDialogEdt(final Component parentComponent,
+		        final Object message, final String title, final int messageType) {
+			
+			Runnable task = new Runnable() {
+				@Override
+				public void run() {
+					JOptionPane.showMessageDialog(parentComponent, message, title,
+							messageType);
+				}
+			};
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/**
+		 * Calls {@link JOptionPane#showInputDialog(Object)} and ensures it is called on 
+		 * the Event Dispatch Thread.
+		 */
+		public static String showInputDialogEdt(final Object message) {
+			String result = "";
+			
+			FutureTask<String> task = new FutureTask<String>(new Callable<String>() {
+				@Override
+				public String call() throws Exception {
+					return JOptionPane.showInputDialog(message);
+				}
+			});
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+				result = task.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Calls {@link JOptionPane#showInputDialog(Component, Object, String, int, Icon, Object[], Object)} and ensures it is called on 
+		 * the Event Dispatch Thread.
+		 */
+		public static Object showInputDialogEdt(final Component parentComponent,
+		        final Object message, final String title, final int messageType, final Icon icon,
+		        final Object[] selectionValues, final Object initialSelectionValue) {
+			Object result = "";
+			
+			FutureTask<Object> task = new FutureTask<Object>(new Callable<Object>() {
+				@Override
+				public Object call() throws Exception {
+					return JOptionPane.showInputDialog(parentComponent, message, title, messageType, icon, selectionValues, initialSelectionValue);
+				}
+			});
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+				result = task.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Calls {@link JOptionPane#showConfirmDialog(Component, Object, String, int)}
+		 * and ensures it is called on the Event Dispatch Thread.
+		 */
+		public static int showConfirmDialogEdt(final Component parentComponent,
+		        final Object message, final String title, final int optionType) {
+			Integer result = 0;
+			
+			FutureTask<Integer> task = new FutureTask<Integer>(new Callable<Integer>() {
+				@Override
+				public Integer call() throws Exception {
+					return JOptionPane.showConfirmDialog(parentComponent, message, title, optionType);
+				}
+			});
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+				result = task.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Calls {@link JOptionPane#showOptionDialog(Component, Object, String, int, int, javax.swing.Icon, Object[], Object)}
+		 * and ensures it is called on the Event Dispatch Thread.
+		 */
+		public static int showOptionDialogEdt(final Component parentComponent,
+		        final Object message, final String title, final int optionType, final int messageType,
+		        final Icon icon, final Object[] options, final Object initialValue) {
+			Integer result = 0;
+			
+			FutureTask<Integer> task = new FutureTask<Integer>(new Callable<Integer>() {
+				@Override
+				public Integer call() throws Exception {
+					return JOptionPane.showOptionDialog(parentComponent, message, title, optionType, messageType, icon, options, initialValue);
+				}
+			});
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+				result = task.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+		
+		/**
+		 * Calls {@link JFileChooser#showSaveDialog(Component)} and ensures it is called on 
+		 * the Event Dispatch Thread.
+		 * 
+		 * @param fileChooser the file chooser where <code>showSaveDialog</code> should be called on.
+	     * @param parent the parent component of the dialog; can be <code>null</code>
+	     * @return the return state of the file chooser on popdown:
+	     * <ul>
+	     * <li>JFileChooser.CANCEL_OPTION
+	     * <li>JFileChooser.APPROVE_OPTION
+	     * <li>JFileChooser.ERROR_OPTION if an error occurs or the
+	     *                  dialog is dismissed
+	     * </ul>
+		 */
+		public static int showSaveDialogEdt(final JFileChooser fileChooser, final Component parent) {
+			int result = 0;
+			
+			FutureTask<Integer> task = new FutureTask<Integer>(new Callable<Integer>() {
+				@Override
+				public Integer call() throws Exception {
+					return fileChooser.showSaveDialog(parent);
+				}
+			});
+			
+			try {
+				if (EventQueue.isDispatchThread()) {
+					task.run(); // Already on Event Dispatch Thread, so we can just run it.
+				} else {
+					EventQueue.invokeAndWait(task);
+				}
+				result = task.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			
+			return result;
+		}
+	}
+	
 }
