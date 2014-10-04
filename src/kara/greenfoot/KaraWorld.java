@@ -66,6 +66,7 @@ public class KaraWorld extends World {
     	// This code is executed when the class is loaded, 
     	// BEFORE the constructor is called
 		if (WORLD_SETUP_FILE == null) {
+			// WORLD_SETUP_FILE is null --> world must be set up by subclass.
 			worldSetup = null;
 		} else {
 			worldSetup = loadWorldSetupFromFile(WORLD_SETUP_FILE);
@@ -77,7 +78,21 @@ public class KaraWorld extends World {
 	 */
 	public KaraWorld() {
 		// Create the new world
-		super(worldSetup.getWidth(), worldSetup.getHeight(), CELL_SIZE);
+		super(worldSetup != null ? worldSetup.getWidth() : 10, worldSetup != null ? worldSetup.getHeight() : 10, CELL_SIZE);
+		
+		// Warn that there was no WORLD_SETUP_FILE specified.
+		if (worldSetup == null) {
+			String message = "<html>" 
+					+ "<p>Could not initialize world. Either specify a valid world setup file in KaraWorld or instantiate <br>"
+					+ "a subclass of KaraWorld (right-click on world, e.g. GameScreen, and choose new). </p><br><p><i>" 
+					+ "Konnte keine Welt laden. Entweder muss eine gueltige world setup Datei in KaraWorld definiert werden oder eine <br>"
+					+ "Subklasse von KaraWelt muss instanziiert werden (Rechtsklick auf die Welt, z.B. GameScreen, und new auswaehlen).</i></p>"
+					+ "</html>";
+			
+			KaraWorld.DialogUtils.showMessageDialogEdt(null, message, "Warning",
+					JOptionPane.WARNING_MESSAGE);
+		}
+		
 		ICON_BACKGROUND_FIELD = getBackground();
 
 		setPaintOrder(PAINT_ORDER);
