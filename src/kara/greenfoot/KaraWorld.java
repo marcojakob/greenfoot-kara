@@ -2,6 +2,7 @@ package kara.greenfoot;
 
 import greenfoot.*;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -258,11 +259,16 @@ public class KaraWorld extends World {
 	 * Saves the world setup to a file that the user can choose.
 	 */
 	public void saveWorldSetupToFile() {
-		try {
-			WorldSetup.FileUtils.saveToFileWithDialog(toASCIIText());
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WorldSetup.FileUtils.saveToFileWithDialog(toASCIIText());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        });
 	}
 	
 	/**
